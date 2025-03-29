@@ -1,0 +1,340 @@
+Anotações CEH 2
+
+Entendi! Vamos analisar essa questão da prova de CeH Practical passo a passo:
+
+Questão:
+
+
+"Um site FTP está hospedado em uma máquina em uma rede. Quebre as credenciais de FTP para obter o arquivo "flag.txt" disponível no servidor FTP e insira o conteúdo no arquivo como a resposta."
+
+Análise da Questão:
+
+
+O objetivo é realizar um ataque de força bruta para descobrir as credenciais de um servidor FTP.
+
+O arquivo "flag.txt" contém a resposta para a questão.
+
+Resolução:
+
+
+
+Ferramenta Hydra:
+
+
+
+A questão já fornece o comando Hydra, que é uma ferramenta de ataque de força bruta usada para descobrir senhas.
+
+As opções fornecidas são variações do comando Hydra:
+
+hydra -L /home/attacker/Desktop/CEH_TOOLS/Wordlists/Username.txt -P /home/attacker/Desktop/CEH_TOOLS/Wordlists/Password.txt ftp://10.10.10.10
+
+Esta opção usa listas de nomes de usuário e senhas para o ataque.
+
+
+
+hydra -I user -P passlist.txt ftp://10.10.10.10 (If username is given )
+
+Esta opção utiliza um único nome de usuário e uma lista de senhas.
+
+
+
+
+
+Como as listas de usuário e senha estão sendo utilizadas, a opção a ser utilizada é: hydra -L /home/attacker/Desktop/CEH_TOOLS/Wordlists/Username.txt -P /home/attacker/Desktop/CEH_TOOLS/Wordlists/Password.txt ftp://10.10.10.10
+
+
+
+
+Obtenção do Arquivo "flag.txt":
+
+
+
+Após descobrir as credenciais de FTP, utilize um cliente FTP (como ftp no Linux) para se conectar ao servidor e baixar o arquivo "flag.txt".
+
+o comando "get flag.txt" informado na imagem será usado quando já estiver conectado via FTP.
+
+
+
+Uma vez conectado, o comando "get flag.txt" irá fazer o download do arquivo para o computador que esta executando o comando.
+
+O conteúdo do arquivo "flag.txt" é a resposta para a questão.
+
+
+
+Considerações:
+
+
+As listas de nomes de usuário e senhas (Username.txt e Password.txt) devem conter nomes de usuário e senhas comuns ou relevantes para o ambiente do teste.
+
+O endereço IP 10.10.10.10 é um exemplo e pode variar na prova.
+
+É muito importante saber manusear comandos no terminal Linux, pois a prova prática do CEH requer conhecimento prático nessas ferramentas.
+
+É muito importante, ter listas de usuarios e senhas já configuradas no Kali linux, pois a prova não deixa os candidatos utilizarem ferramentas externas a maquina disponibilizada pela EC-council.
+
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
+
+Com certeza! Vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Um funcionário chamado John criptografou um contrato legal sensível e fez um backup dele. Ele então excluiu o arquivo criptografado, mas esqueceu de excluir o original. Ele armazenou o documento na área de trabalho do computador do escritório dele. John entrou em contato com você para acessar remotamente o computador do local de trabalho dele, excluir o arquivo e fornecer o número do documento que começa com "F/NXXXXXXXXXXXX". O nome do computador é "Server2019" e as credenciais de login são Nome de usuário: John; Senha: Secure123."
+Análise da Questão:
+O objetivo é acessar remotamente um computador Windows (Server2019) usando RDP (Remote Desktop Protocol).
+Localizar e excluir um arquivo específico na área de trabalho do usuário "John".
+Extrair um número de documento específico do arquivo.
+Resolução:
+Acesso Remoto via RDP:
+Utilize o cliente RDP (Remote Desktop Connection) no seu sistema (geralmente disponível no Windows e Linux).
+Insira o nome do computador "Server2019" ou o endereço IP correspondente.
+Utilize as credenciais fornecidas:
+Nome de usuário: John
+Senha: Secure123
+Conecte-se ao computador remoto.
+Localização e Exclusão do Arquivo:
+Navegue até a área de trabalho do usuário "John" no computador remoto.
+Procure o arquivo do contrato original (o arquivo não criptografado).
+Exclua o arquivo permanentemente.
+Extração do Número do Documento:
+Abra o arquivo do contrato original (se necessário, antes de excluí-lo).
+Localize o número do documento que começa com "F/NXXXXXXXXXXXX".
+Copie ou anote o número do documento.
+Resposta:
+A resposta para a questão é o número do documento "F/NXXXXXXXXXXXX".
+Considerações:
+A questão pressupõe que o RDP esteja habilitado no computador remoto.
+O nome do arquivo do contrato original não é especificado, então você precisará procurar por arquivos relevantes na área de trabalho do usuário "John".
+É crucial entender comandos do Windows caso necessário a navegação dentro de pastas via terminal.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
+
+Entendi, vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Você é Cathie, um hacker ético trabalhando para uma produtora de filmes. Ao testar o website "www.moviescope.com" por vulnerabilidades, você encontrou uma vulnerabilidade de SQL injection. A informação do cookie está armazenada em um arquivo de texto na pasta Documentos da máquina "Ethical Hacker-2". Use o método de ataque SQL DSSS para capturar o link da sessão. Determine o número de contato de Kety associado ao website."
+Análise da Questão:
+O objetivo é explorar uma vulnerabilidade de SQL Injection para obter acesso à sessão de um usuário.
+A informação do cookie necessária para o ataque está em um arquivo de texto na máquina "Ethical Hacker-2".
+Após obter acesso à sessão, você precisa usar uma vulnerabilidade de IDOR (Insecure Direct Object Reference) para encontrar o número de contato de Kety.
+DSSS(Double SQL Syntax Structure), ou SQL Injection baseado em erros.
+Resolução:
+Obtenção do Cookie:
+Acesse a máquina "Ethical Hacker-2".
+Navegue até a pasta Documentos.
+Abra o arquivo de texto que contém a informação do cookie.
+Copie o valor do cookie.
+Ataque SQL Injection (DSSS):
+Utilize uma ferramenta como o Burp Suite ou SQLMap para explorar a vulnerabilidade de SQL Injection no website "www.moviescope.com".
+Use o valor do cookie obtido no passo anterior para autenticar a sua sessão.
+Como a dica aponta que o método é DSSS(Double SQL Syntax Structure), o mesmo tem como objetivo obter informações sobre o banco de dados explorando erros que o mesmo gera devido a consultas SQL mal formadas.
+O objetivo é obter o link da sessão de um usuário autenticado.
+Exploração de IDOR:
+Após obter acesso à sessão, procure por URLs ou parâmetros que permitem acessar informações de outros usuários.
+Modifique os parâmetros para acessar o perfil de Kety.
+Procure pelo número de contato de Kety no perfil dela.
+Resposta:
+A resposta para a questão é o número de contato de Kety.
+Considerações:
+A questão pressupõe que você tenha acesso à máquina "Ethical Hacker-2".
+Você precisa estar familiarizado com ferramentas de SQL Injection como Burp Suite ou SQLMap.
+O método DSSS requer conhecimento de sintaxe SQL e como explorar erros de banco de dados.
+É crucial entender o conceito de IDOR e como explorar essa vulnerabilidade.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
+
+Entendi, vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Como parte de seu trabalho, Raven, um especialista em segurança de rede, foi encarregado de analisar um arquivo de captura de pacotes chamado Dos.pcapng, que foi armazenado na pasta Documentos da máquina Ethical Hacker-1. Ele foi instruído a determinar se alguma credencial de usuário associada ao website www.industry.com foi registrada em formato de texto simples. Após examinar o arquivo, Raven descobriu que o tráfego do site estava trafegando em texto simples e encontrou um nome de usuário e senha registrados em um dos pacotes. Forneça as credenciais encontradas no arquivo de captura no seguinte formato: Nome de usuário/Senha."
+Análise da Questão:
+O objetivo é analisar um arquivo de captura de pacotes (Dos.pcapng) para encontrar credenciais de login em texto simples.
+O arquivo de captura está localizado na pasta Documentos da máquina Ethical Hacker-1.
+O tráfego de interesse é relacionado ao website www.industry.com.
+A dica "http.request.method == POST" indica que as credenciais provavelmente foram enviadas usando o método HTTP POST.
+Resolução:
+Acesso ao Arquivo de Captura:
+Acesse a máquina Ethical Hacker-1.
+Navegue até a pasta Documentos.
+Localize o arquivo Dos.pcapng.
+Análise do Arquivo com Wireshark:
+Abra o arquivo Dos.pcapng com o Wireshark.
+Aplique o filtro http.request.method == POST para exibir apenas os pacotes HTTP POST. Isso ajudará a filtrar os pacotes onde possivelmente as credenciais foram enviadas.
+A dica"Watch Wireshark Section" diz ao candidato que todo o trabalho de análise será feito com o programa WireShark.
+Procure por pacotes HTTP POST que contenham dados de formulário relacionados ao website www.industry.com.
+Examine os dados dos pacotes para encontrar o nome de usuário e senha em texto simples. Os campos de nome de usuário e senha geralmente são denominados "username", "password", "login" ou similares.
+Formatação da Resposta:
+Após encontrar as credenciais, formate a resposta como "Nome de usuário/Senha".
+Considerações:
+É crucial ter conhecimento básico de análise de tráfego de rede e do uso do Wireshark.
+O filtro http.request.method == POST é fundamental para restringir a análise aos pacotes relevantes.
+Preste atenção aos dados dos pacotes HTTP POST, pois as credenciais podem estar em diferentes campos de formulário.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
+
+Certo, vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Como um hacker ético trabalhando para uma produtora de filmes, você foi encarregado de testar o website "www.moviescope.com" por vulnerabilidades. Após conduzir seus testes, você descobriu que o website é vulnerável a ataques de injeção SQL. Para determinar o tipo de método HTTP que apresenta o maior risco para o website, você decide usar a ferramenta OWASP ZAP. A ferramenta irá ajudá-lo a identificar e explorar a vulnerabilidade de injeção SQL para determinar qual método HTTP apresenta o maior risco para o website."
+Análise da Questão:
+O objetivo é utilizar o OWASP ZAP para identificar e explorar uma vulnerabilidade de SQL Injection no website www.moviescope.com.
+Determinar qual método HTTP (GET ou POST) apresenta o maior risco em relação à vulnerabilidade de SQL Injection.
+Resolução:
+Configuração do OWASP ZAP:
+Inicie o OWASP ZAP.
+Configure o ZAP como um proxy para interceptar o tráfego HTTP entre o seu navegador e o website www.moviescope.com.
+Configure o navegador para utilizar o proxy do ZAP.
+Exploração da Vulnerabilidade SQL Injection:
+Navegue pelo website www.moviescope.com e procure por URLs ou parâmetros que possam ser vulneráveis a injeção SQL.
+Utilize as funcionalidades de "Active Scan" ou "Fuzzer" do OWASP ZAP para automatizar a identificação e exploração da vulnerabilidade.
+O ZAP irá enviar várias requisições HTTP (GET e POST) com payloads de injeção SQL para o website.
+Analise as respostas do servidor para identificar requisições que retornam erros de banco de dados ou dados inesperados.
+Determinação do Método HTTP de Maior Risco:
+Compare os resultados das requisições GET e POST.
+Verifique qual método HTTP permitiu explorar a vulnerabilidade de forma mais eficaz (por exemplo, retornando mais informações sensíveis do banco de dados).
+O método que permitiu explorar a vulnerabilidade com maior sucesso é o método de maior risco.
+Resposta:
+A resposta é o método HTTP (GET ou POST) que apresenta o maior risco.
+Considerações:
+É crucial ter conhecimento básico de SQL Injection e como explorar essa vulnerabilidade.
+O OWASP ZAP é uma ferramenta poderosa para testes de segurança web e requer familiaridade com suas funcionalidades.
+A dica "Watch The OWASP ZAP video in SQL Injection section" indica que o candidato deve consultar o vídeo fornecido para aprender a usar o ZAP para explorar SQL Injection.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
+
+Entendi, vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Após escanear a rede, você, um hacker ético, descobriu que alguns hosts estão ativos. Identifique o número de hosts que estão ativos."
+"Observe os resultados da verificação de Q1 ou use este comando: nmap -sn 192.168.9.0/24 (pois isso verifica apenas se o host está ativo ou não)"
+"Seja qual for o número de hosts ativos, seja dois hosts, cinco ou seis hosts, sete, você terá a resposta."
+Análise da Questão:
+O objetivo é usar o Nmap para descobrir quais hosts estão ativos em uma determinada rede.
+O comando fornecido, nmap -sn 192.168.9.0/24, é projetado para fazer um "ping scan" e listar os hosts ativos.
+A dica informa que a resposta é um número que representa o número de hosts ativos.
+Resolução:
+Executar o comando Nmap:
+Abra um terminal na máquina Ethical Hacker-1 (supondo que seja onde você está trabalhando).
+Execute o comando: nmap -sn 192.168.9.0/24
+Interpretar os resultados:
+O Nmap retornará uma lista de hosts que estão ativos na rede 192.168.9.0/24.
+A resposta estará relacionada com a quantidade de hosts ativos, não seus ips, apenas a quantidade.
+Contar os hosts ativos:
+Conte o número de endereços IP relatados como ativos pelo Nmap.
+Fornecer a resposta:
+A resposta é o número de hosts ativos encontrados.
+Considerações:
+O comando nmap -sn realiza um "ping scan", que é uma maneira rápida de descobrir quais hosts estão ativos em uma rede.
+O intervalo de rede 192.168.9.0/24 cobre endereços IP de 192.168.9.1 a 192.168.9.254.
+Os resultados do Nmap mostrarão quantos desses endereços IP responderam ao ping.
+A dica "Look at the scan results of Q1" diz para o candidato que as vezes essa mesma análise já foi feita na questão 1 da prova.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
+
+Entendi, vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Você está trabalhando como hacker ético em uma empresa onde um funcionário roubou segredos comerciais e os criptografou usando VeraCrypt. O arquivo de volume VeraCrypt chamado 'secret' está salvo na área de trabalho da máquina Ethical Hacker-1. A senha para o arquivo foi descoberta em um dos emails do funcionário durante uma investigação. Sua tarefa é descriptografar o arquivo usando a senha 'test' e identificar o código secreto contido nele."
+"Portanto, o nome do arquivo de volume do VeraCrypt chamado Secret é salvo no hacker ético."
+"Use Veracrypt (Watch Veracrypt Video in Cryptography Section)"
+Análise da Questão:
+O objetivo é descriptografar um arquivo VeraCrypt usando uma senha conhecida.
+O arquivo "secret" está localizado na área de trabalho da máquina Ethical Hacker-1.
+A senha para o arquivo é "test".
+"Use Veracrypt" e "Watch Veracrypt Video in Cryptography Section" diz ao canditado para utilizar o programa VeraCrypt e caso tenha dificuldades, assista ao vídeo disponibilizado no menu lateral do iLab.
+Resolução:
+Acesso ao arquivo VeraCrypt:
+Acesse a máquina Ethical Hacker-1.
+Navegue até a área de trabalho.
+Localize o arquivo "secret".
+Descriptografia do arquivo:
+Abra o VeraCrypt.
+Selecione "File" > "Select File..." e escolha o arquivo "secret".
+Clique em "Mount".
+Insira a senha "test" no campo de senha.
+Selecione um ponto de montagem (uma letra de unidade, por exemplo).
+Clique em "OK".
+Localização do código secreto:
+Após a montagem do volume, abra o ponto de montagem (a unidade que você selecionou).
+Procure pelo código secreto dentro dos arquivos descriptografados. O código pode estar em um arquivo de texto, imagem ou outro formato.
+Resposta:
+A resposta é o código secreto encontrado dentro do volume descriptografado.
+Considerações:
+É crucial ter o VeraCrypt instalado na máquina Ethical Hacker-1.
+Certifique-se de inserir a senha "test" corretamente.
+O código secreto pode estar escondido em diferentes tipos de arquivos dentro do volume VeraCrypt.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
+
+Entendi, vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Como um hacker ético trabalhando com um banco, sua tarefa é descriptografar um arquivo cifrado chamado 'Cry-RC4-Accountno.hex' armazenado na pasta Documentos da máquina Ethical Hacker-1. O arquivo foi criptografado por um invasor que roubou o número da conta de um cliente do banco de dados do banco usando o CrypTool. Seu objetivo é determinar o número da conta descriptografando o arquivo, com uma dica para usar '14' como o valor da chave no comprimento da chave."
+Análise da Questão:
+O objetivo é descriptografar um arquivo criptografado usando RC4 com o CrypTool.
+O arquivo cifrado e o CrypTool estão disponíveis na máquina Ethical Hacker-1.
+A dica fornece o tamanho da chave (14) e sugere que este seja o valor da chave, sendo assim, a chave a ser usada será "14".
+Resolução:
+Abrir o CrypTool:
+Acesse a máquina Ethical Hacker-1 e abra o CrypTool.
+Carregar o arquivo cifrado:
+No CrypTool, vá em "File" -> "Open" e selecione o arquivo "Cry-RC4-Accountno.hex" da pasta Documentos.
+Selecionar o algoritmo de descriptografia:
+Vá em "Encrypt/Decrypt" -> "Symmetric (classic)" -> "RC4".
+Inserir a chave:
+No prompt de chave, insira "14" na caixa de texto.
+Garanta que Key length esteja em 8 bits como no exemplo da imagem.
+Descriptografar o arquivo:
+Clique em "Decrypt".
+Obter o número da conta:
+O CrypTool exibirá o conteúdo descriptografado, que deve conter o número da conta do cliente.
+Resposta:
+A resposta é o número da conta descriptografado.
+Considerações:
+O CrypTool é uma ferramenta de criptografia/descriptografia que precisa estar disponível na máquina Ethical Hacker-1.
+A dica "14" como o valor da chave no comprimento da chave é crucial para descriptografar corretamente o arquivo.
+A extensão .hex do arquivo significa que ele está em hexadecimal, então os dados serão exibidos em hexadecimal, para transforma-los em texto legível se necessário no CrypTool existe ferramentas para tal, caso contrario sites online podem fazer está transformação.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
+
+Entendi, vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Uma empresa de gestão de ativos acabou de descobrir que um de seus corretores de bolsa obteve secretamente informações confidenciais de contas de negociação usando um aplicativo da empresa. O corretor de bolsa salvou essas informações no cartão SD de seu celular Android, e a empresa teme que ele possa vender essas informações para seus concorrentes. Como um hacker ético, você foi contratado para recuperar e excluir o arquivo do celular do corretor de bolsa. Forneça as informações da conta presentes no arquivo. Observe que apenas valores numéricos devem ser fornecidos no campo de resposta."
+"Observe que somente valores numéricos devem ser fornecidos no campo de resposta."
+"Watch the 'Hacking Android' section" diz ao candidato para ver a aba com o vídeo para consulta dentro do iLab.
+Análise da Questão:
+O objetivo é extrair informações numéricas sensíveis de um arquivo em um dispositivo Android.
+O arquivo está localizado no cartão SD do celular Android do corretor de bolsa.
+As informações a serem extraídas são exclusivamente valores numéricos.
+Resolução:
+Acesso ao dispositivo Android:
+Existem várias maneiras de acessar o dispositivo Android, dependendo das ferramentas disponíveis:
+ADB (Android Debug Bridge): Se o ADB estiver habilitado no dispositivo, você pode usar comandos ADB para acessar o sistema de arquivos do dispositivo.
+Ferramentas de forense móvel: Ferramentas como Autopsy ou Oxygen Forensic Suite podem ser usadas para extrair dados do dispositivo.
+Emulação: Se você tiver uma imagem do dispositivo, você pode usar um emulador Android para acessar o sistema de arquivos.
+Localização do arquivo:
+Navegue até o cartão SD do dispositivo e localize o arquivo que contém as informações sensíveis.
+Extração das informações numéricas:
+Abra o arquivo e examine o conteúdo.
+Extraia todos os valores numéricos presentes no arquivo.
+Ignore qualquer texto ou outros caracteres não numéricos.
+Formatação da resposta:
+Forneça os valores numéricos extraídos, separados por vírgulas, se houver vários valores.
+Considerações:
+O acesso ao dispositivo Android pode ser um desafio, dependendo das configurações do dispositivo e das ferramentas disponíveis.
+Ferramentas de forense móvel podem ser necessárias para extrair dados de dispositivos bloqueados ou criptografados.
+A questão especifica que apenas valores numéricos devem ser fornecidos na resposta.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
+
+Entendi, vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Um invasor perigoso explorou uma vulnerabilidade em uma máquina em uma rede corporativa e codificou o endereço IP da máquina alvo. O arquivo codificado foi descoberto pelo vigilante administrador do banco de dados durante uma auditoria de rotina do banco de dados. Os dados codificados estão localizados no arquivo 'Encoded data.txt' na área de trabalho da máquina Ethical Hacker-1. Sua tarefa como hacker ético é decodificar o arquivo e extrair o endereço IP da máquina comprometida. A segurança de toda a rede corporativa depende do seu sucesso. (Senha: shadow123)"
+"Use BCTextEncoder (Or Watch its video)"
+Análise da Questão:
+O objetivo é decodificar um arquivo de dados codificado para extrair um endereço IP.
+O arquivo "Encoded data.txt" e a ferramenta BCTextEncoder estão localizados na máquina Ethical Hacker-1.
+A senha "shadow123" pode ser necessária para descriptografar o arquivo antes da decodificação ou ser necessário para decodificar o arquivo em si.
+Resolução:
+Acesso ao arquivo e ferramenta:
+Acesse a máquina Ethical Hacker-1.
+Navegue até a área de trabalho e localize o arquivo "Encoded data.txt" e a ferramenta BCTextEncoder.
+Decodificação do arquivo:
+Abra o BCTextEncoder.
+Carregue o arquivo "Encoded data.txt" no BCTextEncoder.
+Analise o BCTextEncoder, para verificar qual tipo de criptografia foi utilizada para a codificação do arquivo, por exemplo Base64, Hexadecimal, ASCII e etc.
+Utilize a senha "shadow123" caso seja necessário para a decodificação do arquivo, para o programa realizar a reversão da criptografia.
+Execute o processo de decodificação.
+Extração do endereço IP:
+Após a decodificação, examine o conteúdo do arquivo para encontrar o endereço IP.
+O endereço ip será o conjunto de números no formato ipv4, exemplo 192.168.0.1
+Resposta:
+A resposta é o endereço IP extraído do arquivo decodificado.
+Considerações:
+A ferramenta BCTextEncoder é crucial para decodificar o arquivo.
+A senha "shadow123" pode ser necessária para descriptografar o arquivo antes da decodificação.
+O arquivo decodificado pode conter outros dados além do endereço IP.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
