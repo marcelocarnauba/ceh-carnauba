@@ -1,0 +1,188 @@
+Beleza. Aqui vai um kit direto ao ponto pra você passar no CEH Practical sem depender de ninguém.
+
+⸻
+
+⚔️ KIT DE SOBREVIVÊNCIA — CEH Practical
+
+🧠 1. Fluxo mental (isso aqui vale ouro)
+
+Segue SEM INVENTAR:
+
+1. Recon
+2. Scan
+3. Enumeração
+4. Exploração
+5. Pós-exploração
+
+👉 Travou? Volta uma etapa. 90% dos erros são pular fase.
+
+⸻
+
+🔎 2. Scan (se fizer isso direito, metade da prova já foi)
+
+Nmap base (use SEM pensar muito)
+
+nmap -sC -sV -Pn -T4 -oN scan.txt <IP>
+
+Scan completo (quando tiver tempo)
+
+nmap -p- --min-rate 1000 -T4 <IP>
+
+Depois:
+
+nmap -p <PORTAS> -sC -sV <IP>
+
+👉 Regra:
+porta aberta = caminho de entrada
+
+⸻
+
+🧬 3. Enumeração (onde a prova é decidida)
+
+SMB
+
+enum4linux -a <IP>
+smbclient -L //<IP> -N
+
+HTTP
+
+* Abre no browser
+* Depois:
+
+gobuster dir -u http://<IP> -w /usr/share/wordlists/dirb/common.txt
+
+FTP
+
+ftp <IP>
+
+👉 Testa:
+
+anonymous:anonymous
+
+SSH
+
+* Só tenta brute se fizer sentido
+
+⸻
+
+💥 4. Exploração (sem frescura)
+
+Searchsploit
+
+searchsploit <serviço/versão>
+
+Metasploit (quando for óbvio)
+
+msfconsole
+search <serviço>
+use <exploit>
+set RHOSTS <IP>
+run
+
+👉 Se não for óbvio, evita perder tempo aqui.
+
+⸻
+
+🔐 5. Senhas / Hashes
+
+Hydra (clássico de prova)
+
+hydra -l admin -P rockyou.txt <IP> ssh
+
+Hash cracking
+
+john hash.txt
+
+ou
+
+hashcat -m <tipo> hash.txt rockyou.txt
+
+⸻
+
+🧭 6. Web (sempre cai)
+
+Testa:
+
+* /admin
+* /login
+* /backup
+* /config
+
+SQL Injection (básico)
+
+sqlmap -u "http://site/page.php?id=1" --dbs
+
+⸻
+
+🧗 7. Privilégio (muita gente perde aqui)
+
+Linux
+
+sudo -l
+find / -perm -4000 2>/dev/null
+
+👉 Depois vai no:
+
+* GTFOBins
+
+⸻
+
+🪟 8. Windows (rápido e cirúrgico)
+
+whoami
+whoami /priv
+systeminfo
+
+👉 Procura:
+
+* serviços vulneráveis
+* permissões erradas
+
+⸻
+
+📁 9. Flags (não vacila)
+
+Sempre procura:
+
+find / -name "*.txt" 2>/dev/null
+
+ou
+
+dir /s *.txt
+
+⸻
+
+🧠 10. Regras de ouro (isso aqui separa quem passa de quem reprova)
+
+* ❗ Não fica preso mais de 15 min num ponto
+* ❗ Se não entrou → enumeração tá ruim
+* ❗ Sempre documenta o que achou
+* ❗ Lê o enunciado com calma (eles dão pista!)
+
+⸻
+
+⚡ Estratégia real de prova
+
+* Primeiro: resolve os fáceis (HTTP, FTP, SMB)
+* Depois: volta pros difíceis
+* Não tenta ser herói em exploit complexo
+
+⸻
+
+🧨 Erros que te fazem reprovar
+
+* ficar insistindo em exploit errado
+* ignorar porta aberta
+* não testar credenciais padrão
+* esquecer privilege escalation
+
+⸻
+
+🧠 Último conselho (o mais importante)
+
+CEH Practical não é sobre ser hacker foda.
+É sobre seguir processo sem se perder.
+
+⸻
+
+Se quiser, te faço agora um simulado estilo prova com máquina típica (passo a passo) pra você treinar exatamente como vai cair.
