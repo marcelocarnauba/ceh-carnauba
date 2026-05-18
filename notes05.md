@@ -154,6 +154,8 @@ tcp.flags.syn == 1 and tcp.flags.ack == 0    (How many machines) or Go to statis
 tcp.flags.syn == 1   (Which machine for dos)
 http.request.method == POST   (for passwords) or click tools ---> credentials
 Also
+
+Statistics
 ```
 # Find FQDN
 ```
