@@ -156,6 +156,7 @@ http.request.method == POST   (for passwords) or click tools ---> credentials
 Also
 
 Statistics
+mqtt
 ```
 # Find FQDN
 ```
