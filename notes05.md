@@ -1,4 +1,4 @@
-# Copied and modified ceh practical notes
+# Copied and modified ceh practical notes ECCOUNCIL LABS
 #  Scanning Networks (always do sudo su) --> To be root
 ```
 1- Nmap scan for alive/active hosts command for 192.189.19.18- nmap -A 192.189.19.0/24 or nmap -T4 -A ip
