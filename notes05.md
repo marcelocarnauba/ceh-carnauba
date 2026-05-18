@@ -29,6 +29,8 @@ e pode ser tbm nmap -sV --script vuln 192.168.142.22
 
 ou Nessus em https://localhost:8834 admin password ... Policies new Policy advnaced Scan salva e POrt Scanning open tcp ports enum Advanced mas ... tem que ter uma senha do site (varredura credenciada)
 
+NIkto - Apps -> Pentesting -> Web App Analysis -> Web Vulnerability Scanners -> nikto (demora pra caramba, nao compensa)
+
 ```
 #  Quick Overview (Stegnography) --> Snow , Openstego
 ```
@@ -118,6 +120,25 @@ Outra
 1- Usar o OWASP ZAP no WIndows -> Automated Scan
 O bicho faz tudo, soh botar a url pura mesmo
 
+
+```
+# Malware ELF
+```
+DIE - Detect It Easy - Windows
+Module 07 ->  Malware -> analysis tools -> Static Malware.. -> Packing obfuscation -> DIE
+s'o carregar o arquivo
+
+Ou..
+
+PE - Find the Portable Executable
+Module 07 ->  Malware -> analysis tools -> Static Malware.. -> PE Extraction Tools
+soh carregar o arquivo, header info
+
+njRAT (windows)
+Module 07 ->  Malware ->  Trojans Types -> Remote Acces Trojans (RAT)
+porta 5552 mesmo -> Builder -> bota IP da vitima, aperta em build, gera o arquivo e tem que mandar pra vitima(soh aproveitar pastas com esses utilitarios)
+
+Theef ... Server 'e a vitima e Client o atacante
 
 ```
 # Android
