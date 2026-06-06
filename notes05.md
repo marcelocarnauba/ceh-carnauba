@@ -1,4 +1,24 @@
 # Copied and modified ECCOUNCIL LABS
+
+find / -type f -name "*.txt"
+find / -name wp-config.php 2>/dev/null
+nmap -sV -sC
+nmap -Pn -T4 10.10.10.10
+curl -I www.certifiedhacker.com
+whatweb site
+hydra -L users.txt -P rockyou.txt ftp://ip
+hashid -m <hash>
+john --list=formats | grep -i md5
+john --format=raw-sha1 hash.txt --wordlist=/usr/share/wordlists/rockyou.txt
+ssh -L 8888:localhost:10000 agent47@10.64.183.180
+hashcat -m 0 hash.txt rockyou.txt
+hashcat --help | less
+1000  NTLM
+0     MD5
+100   SHA1
+1400  SHA256
+1700  SHA512
+
 #  Scanning Networks (always do sudo su) --> To be root
 ```
 1- Nmap scan for alive/active hosts command for 192.189.19.18- nmap -A 192.189.19.0/24 or nmap -T4 -A ip
