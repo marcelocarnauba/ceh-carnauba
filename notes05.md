@@ -1,5 +1,6 @@
 # Copied and modified ECCOUNCIL LABS
 
+```
 find / -type f -name "*.txt"
 find / -name wp-config.php 2>/dev/null
 nmap -sV -sC
@@ -18,6 +19,7 @@ hashcat --help | less
 100   SHA1
 1400  SHA256
 1700  SHA512
+```
 
 #  Scanning Networks (always do sudo su) --> To be root
 ```
